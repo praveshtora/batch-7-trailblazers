@@ -1,0 +1,12 @@
+{
+  "name": "batch-7-trailblazers",
+  "version": "1.0.0",
+  "description": "Online Issue Tracker",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pesto-students/batch-7-trailblazers.git"
+  },
+  "author": "batch-7-trailblazers",
+  "license": "MIT"
+}
