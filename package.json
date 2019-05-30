@@ -27,5 +27,15 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
+  },
+  "scripts": {
+    "test": "yarn test:client && yarn test:server",
+    "test:client": "cd client && yarn && yarn test",
+    "test:server": "cd server && yarn && yarn test"
   }
 }
