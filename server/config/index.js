@@ -5,6 +5,6 @@ export default {
     PORT: PORT || 8000,
   },
   database: {
-    CONNECTION_URL: DATABASE_CONNECTION_STRING || 'mongodb://localhost:27017/issues-tracker',
+    CONNECTION_URL: DATABASE_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/issues-tracker',
   },
 };

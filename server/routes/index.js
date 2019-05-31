@@ -1,4 +1,5 @@
 import express from 'express';
+import authentication from '../controllers/authentication';
 
 const router = express.Router();
 
@@ -6,5 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.send('Express server up');
 });
+
+router.post('/signup', authentication.signUp);
 
 module.exports = router;
