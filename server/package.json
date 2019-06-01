@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "yarn babel src -d dist --source-maps",
+    "serve": "yarn build && node dist/index.js",
     "start": "nodemon --exec babel-node app.js",
     "test": "jest"
   },
