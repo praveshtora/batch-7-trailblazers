@@ -1,16 +1,20 @@
 import Joi from '@hapi/joi';
 import User from '../models/userModel';
+import Dashboard from '../models/dashboardModel';
 import { buildResponse } from '../utils/helpers';
 
 const validateBody = (body) => {
   const schema = Joi.object().keys({
     name: Joi.string(),
-    email: Joi.string().email().required(),
+    email: Joi.string()
+      .email()
+      .required(),
     password: Joi.string().required(),
   });
   const { error } = Joi.validate(body, schema);
   return error || null;
 };
+
 exports.signUp = async (req, res, next) => {
   const error = validateBody(req.body);
   if (error) {
@@ -27,7 +31,12 @@ exports.signUp = async (req, res, next) => {
       return res.status(400).send(response);
     }
     const user = new User({ name, email, password });
-    await user.save();
+    const newlyAddedUser = await user.save();
+
+    const newDahsboard = new Dashboard({
+      userId: newlyAddedUser._id,
+    });
+    await newDahsboard.save();
     const response = buildResponse(true, []);
     return res.status(200).send(response);
   } catch (err) {
