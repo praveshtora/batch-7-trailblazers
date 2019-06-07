@@ -12,6 +12,7 @@ import router from './routes';
 import dashboard from './routes/dashboard';
 import boardSettings from './routes/boardSettings';
 import database from './config/database';
+import board from './routes/board';
 
 const milliSecondsInADay = 8640000;
 
@@ -44,6 +45,7 @@ require('./config/passport');
 app.use('/', router);
 app.use('/dashboard', dashboard);
 app.use('/board', boardSettings);
+app.use('/board', board);
 
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 
