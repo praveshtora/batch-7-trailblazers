@@ -60,4 +60,42 @@ describe('Dashboard screen APIs', () => {
         });
     });
   });
+  describe('Test boards list  API', () => {
+    afterAll(() => {
+      server.close();
+      database.disconnectDB();
+    });
+    const userId = '5cf9425d064475090357aa87';
+    const resultObject = {
+      isSuccess: true,
+      message: '',
+      data: [
+        {
+          name: 'amazon',
+          owner: {
+            _id: '5cf9425d064475090357aa87',
+            name: 'manish zanzad',
+          },
+        },
+        {
+          name: 'flipkat',
+          owner: {
+            _id: '5cf9425d064475090357aa87',
+            name: 'manish zanzad',
+          },
+        },
+      ],
+    };
+
+    test('Should return 200', (done) => {
+      const findOneDashboard = stub(Dashboard.prototype, 'populate').returns(resultObject);
+      request(server)
+        .get(`/dashboard/getboards/${userId}`)
+        .expect(200, () => {
+          findOneDashboard.restore();
+          done();
+        });
+    });
+  });
+
 });

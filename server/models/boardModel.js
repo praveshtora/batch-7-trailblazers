@@ -11,7 +11,7 @@ const BoardSchema = new Schema({
   id: { type: Number },
   name: { type: String, required: true },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  lifecycles: [{ type: String, unique: true }],
+  lifecycles: [{ type: String }],
   issues: { type: Array, default: [] },
   members: { type: [MemberSchema], default: [] },
 });
