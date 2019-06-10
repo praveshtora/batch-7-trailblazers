@@ -62,7 +62,6 @@ export default function SignUp() {
   };
 
   const postData = async (e) => {
-    console.log(user);
     e.preventDefault();
     try {
     const response = await axios({
@@ -71,7 +70,6 @@ export default function SignUp() {
       data : {...user},
       headers: { "Content-Type": "application/json" },
     });
-    console.log(response);
     if(response && response.data && response.data.isSuccess) {
       setErrorMessage('');
       setSignUpSucess(true);

@@ -88,14 +88,15 @@ describe('Dashboard screen APIs', () => {
     };
 
     test('Should return 200', (done) => {
+      const findOne = stub(Dashboard, 'findOne').returns(resultObject);
       const findOneDashboard = stub(Dashboard.prototype, 'populate').returns(resultObject);
       request(server)
         .get(`/dashboard/getboards/${userId}`)
         .expect(200, () => {
           findOneDashboard.restore();
+          findOne.restore();
           done();
         });
     });
   });
-
 });
