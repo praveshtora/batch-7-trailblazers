@@ -41,7 +41,7 @@ const addBoard = async (req, res) => {
     const newBoard = {
       ...req.body,
       owner,
-      members: [{ userId, role: constants.ROLE_ENUM.SUPER_ADMIN }],
+      members: [{ user: userId, role: constants.ROLES_ENUM.SUPER_ADMIN }],
     };
     const boardModel = new Board(newBoard);
     const resBoard = await boardModel.save();
@@ -70,4 +70,3 @@ const getBoardList = async (req, res) => {
 };
 
 module.exports = { addBoard, getBoardList };
-

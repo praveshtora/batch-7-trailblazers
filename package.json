@@ -36,7 +36,8 @@
   "scripts": {
     "test": "yarn test:client && yarn test:server",
     "test:client": "cd client && yarn && yarn test",
-    "test:server": "cd server && yarn && yarn test"
+    "test:server": "cd server && yarn && yarn test",
+    "build:server": "cd server && yarn build"
   },
   "dependencies": {
     "dotenv": "^8.0.0"
