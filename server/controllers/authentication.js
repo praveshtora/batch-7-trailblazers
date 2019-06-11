@@ -1,22 +1,10 @@
-import Joi from '@hapi/joi';
 import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
-import { buildResponse } from '../utils/helpers';
+import { buildResponse, joiValidate } from '../utils/helpers';
+  import { SIGNUP_FIELDS_SCHEMA } from '../utils/constants';
 
-const validateBody = (body) => {
-  const schema = Joi.object().keys({
-    name: Joi.string(),
-    email: Joi.string()
-      .email()
-      .required(),
-    password: Joi.string().required(),
-  });
-  const { error } = Joi.validate(body, schema);
-  return error || null;
-};
-
-exports.signUp = async (req, res, next) => {
-  const error = validateBody(req.body);
+const signUp = async (req, res, next) => {
+  const error = joiValidate(req.body, SIGNUP_FIELDS_SCHEMA);
   if (error) {
     const [{ message }] = error.details;
     const response = buildResponse(false, message);
@@ -33,13 +21,27 @@ exports.signUp = async (req, res, next) => {
     const user = new User({ name, email, password });
     const newlyAddedUser = await user.save();
 
-    const newDahsboard = new Dashboard({
+    const newDashboard = new Dashboard({
       userId: newlyAddedUser._id,
     });
-    await newDahsboard.save();
-    const response = buildResponse(true, []);
+    await newDashboard.save();
+    const response = buildResponse(true, 'Signup successfully!');
+
     return res.status(200).send(response);
   } catch (err) {
     return next(err);
   }
+};
+
+const login = (req, res, next) => {
+  req.login(req.user, (err) => {
+    if (err) return next(err);
+    const response = buildResponse(true, 'Login successfully!');
+    return res.status(200).send(response);
+  });
+};
+
+module.exports = {
+  signUp,
+  login,
 };
