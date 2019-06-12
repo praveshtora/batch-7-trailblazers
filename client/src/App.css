@@ -19,6 +19,11 @@
   color: white;
 }
 
+.loader-center {
+  position: absolute;
+  top: 50%;
+}
+
 .App-link {
   color: #61dafb;
 }

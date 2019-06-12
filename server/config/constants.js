@@ -4,4 +4,5 @@ const ROLES_ENUM = {
   USER: 'USER',
 };
 
-export default { ROLES_ENUM };
+const SERVER_ERROR_MESSAGE = 'Some error occurred on server';
+export default { ROLES_ENUM, SERVER_ERROR_MESSAGE };

@@ -1,0 +1,9 @@
+.member-table {
+  width: 50%;
+  display: inline-block;
+}
+
+.table-heading {
+  margin-left: 15px !important;
+  float: left;
+}

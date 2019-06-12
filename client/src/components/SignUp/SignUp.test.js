@@ -2,7 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import SignUp from "./index";
 import axios from "axios";
-import  toJson  from "enzyme-to-json";
+import toJson from "enzyme-to-json";
 
 describe("<Signup />", () => {
   let wrapper;
