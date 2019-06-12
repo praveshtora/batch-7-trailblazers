@@ -1,6 +1,7 @@
 import { buildResponse } from '../utils/helpers';
 
 export default (req, res, next) => {
+  console.log(req.user);
   if (process.env.NODE_ENV === 'test') return next();
   if (req.isAuthenticated()) return next();
 

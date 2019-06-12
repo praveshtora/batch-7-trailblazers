@@ -36,7 +36,7 @@ const addBoard = async (req, res) => {
       const response = buildResponse(false, message);
       return res.status(400).send(response);
     }
-    const userId = req.params.id;
+    const userId = req.user.id;
     const owner = userId;
     const newBoard = {
       ...req.body,
@@ -55,7 +55,7 @@ const addBoard = async (req, res) => {
 
 const getBoardList = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user.id;
     const dashboard = await Dashboard.findOne({ userId }).populate({
       path: 'boards',
       select: { name: 1, owner: 1 },

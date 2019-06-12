@@ -1,7 +1,7 @@
 import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
 import { buildResponse, joiValidate } from '../utils/helpers';
-  import { SIGNUP_FIELDS_SCHEMA } from '../utils/constants';
+import { SIGNUP_FIELDS_SCHEMA } from '../utils/constants';
 
 const signUp = async (req, res, next) => {
   const error = joiValidate(req.body, SIGNUP_FIELDS_SCHEMA);
@@ -38,6 +38,7 @@ const login = (req, res, next) => {
     if (err) return next(err);
     const response = buildResponse(true, 'Login successfully!');
     return res.status(200).send(response);
+    // return res.redirect('http://localhost:3000/dashboard');
   });
 };
 

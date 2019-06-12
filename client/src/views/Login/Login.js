@@ -59,16 +59,15 @@ const Login = props => {
     try {
       const response = await axios({
         method: 'post',
-        url: `${SERVER_URL}/login`,
+        url: `/login`,
         data: { email: email.value, password: password.value },
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (!response || !response.data) {
         throw new Error('No response from server');
       }
       if (!response.data.isSuccess) throw new Error(response.data.message);
-
       props.history.push('/dashboard');
     } catch (err) {
       showError(err.message);

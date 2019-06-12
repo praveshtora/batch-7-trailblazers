@@ -19,7 +19,11 @@ export default function Dashboard(props) {
 
   async function fetchBoardList() {
     try {
-      const result = await axios(SERVER_URL + "/dashboard/getboards");
+      const result = await axios("/dashboard/getboards",{
+        method :'get',
+        withCredentials:true,
+        headers: { 'Content-Type': 'application/json' }
+      });
       const boards = result.data.data;
 
       if (result.data.isSuccess) {
