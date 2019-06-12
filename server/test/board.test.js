@@ -1,30 +1,28 @@
 import request from 'supertest';
-import { stub } from 'sinon';
+import { mock } from 'sinon';
+import 'sinon-mongoose';
 import server from '../app';
 import database from '../config/database';
 import Board from '../models/boardModel';
 
 const boardMock = {
-  lifecycles: [
-    'to-do',
-    'in-porgress',
-    'complete',
-  ],
+  lifecycles: ['to-do', 'in-porgress', 'complete'],
   issues: [
     {
-      id: 1002,
+      _doc: {
+        title: 'Creat Repo',
+        lifeCycle: 'to-do',
+        comments: ['5cf5973060e08a863a9cf46f'],
+        id: 1002,
+      },
       title: 'Creat Repo',
-      description: 'ASKK askjka asda',
-      asignee: 'Manish',
       lifeCycle: 'to-do',
-      comments: [
-        '5cf5973060e08a863a9cf46f',
-      ],
+      comments: ['5cf5973060e08a863a9cf46f'],
+      id: 1002,
     },
   ],
   name: 'amazon',
-  members: [
-  ],
+  members: [],
   id: 74,
   __v: 0,
 };
@@ -37,14 +35,10 @@ const expectedResponse = {
       'to-do': {
         issues: [
           {
-            asignee: 'Manish',
-            comments: [
-              '5cf5973060e08a863a9cf46f',
-            ],
-            id: 1002,
+            comments: 1,
             title: 'Creat Repo',
-            description: 'ASKK askjka asda',
             lifeCycle: 'to-do',
+            id: 1002,
           },
         ],
       },
@@ -58,7 +52,7 @@ const expectedResponse = {
   },
 };
 
-describe('Sign up API test', () => {
+describe('Get Board details got Kanban test', () => {
   afterAll(() => {
     server.close();
     database.disconnectDB();
@@ -67,30 +61,54 @@ describe('Sign up API test', () => {
   const id = 200;
 
   it('should throw Bad request if board id not present', (done) => {
-    const find = stub(Board, 'find').returns([null]);
+    const board = mock(Board);
+    board
+      .expects('findOne')
+      .chain('populate')
+      .resolves(null);
     request(server)
       .get(`/board/${id}`)
       .expect(400, {
         isSuccess: false,
-        message: `No board found with id :${id}`,
+        message: 'Oops! Board not found',
+      })
+      .end((err) => {
+        board.restore();
+        if (err) {
+          return done(err);
+        }
+        return done();
+      });
+  });
+  it('should throw Bad request if board id not number', (done) => {
+    request(server)
+      .get('/board/seven')
+      .expect(400, {
+        isSuccess: false,
+        message: 'Invalid request to get board details!',
       })
       .end((err) => {
         if (err) {
           return done(err);
         }
-        find.restore();
         return done();
       });
   });
   it('should send data if boardId found', (done) => {
-    const board = boardMock;
-    const find = stub(Board, 'find').returns([board]);
-    const populate = stub(Board, 'populate').returns(board);
-    request(server).get(`/board/${id}`).expect(200, { ...expectedResponse }).end((err) => {
-      if (err) return done(err);
-      find.restore();
-      populate.restore();
-      return done();
-    });
+    const board = mock(Board);
+    board
+      .expects('find')
+      .withArgs({ id: 200 }, 'lifecycles issues')
+      .chain('populate')
+      .withArgs('issues', 'title  lifeCycle comments id')
+      .resolves([boardMock]);
+    request(server)
+      .get(`/board/${id}  `)
+      .expect(200, { ...expectedResponse })
+      .end((err) => {
+        if (err) return done(err);
+
+        return done();
+      });
   });
 });

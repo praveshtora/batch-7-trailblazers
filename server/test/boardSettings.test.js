@@ -27,38 +27,36 @@ describe('Get board team members', () => {
       members: [
         {
           user: '22',
-          role: 'SUPER_ADMIN'
+          role: 'SUPER_ADMIN',
         },
         {
           user: '23',
-          role: 'ADMIN'
-        }
-      ]
+          role: 'ADMIN',
+        },
+      ],
     };
     const boardId = 12;
 
-    test('return 404 if board id not passed', done => {
+    test('return 400 if board id not passed', (done) => {
       request(server)
         .get('/board/members/')
-        .expect(404, done);
+        .expect(400, done);
     });
-    test('return 400 if board id not valid', done => {
+    test('return 400 if board id not valid', (done) => {
       request(server)
         .get('/board/members/sdf')
         .expect(400, done);
     });
-    test('return 200', done => {
+    test('return 200', (done) => {
       const findOneBoard = stub(Board, 'findOne').returns({
         _id: 'dsdds',
-        populate: () => {
-          return {
-            members: resultObject.members
-          };
-        }
+        populate: () => ({
+          members: resultObject.members,
+        }),
       });
 
       const populateBoard = stub(Board.prototype, 'populate').returns(
-        resultObject.members
+        resultObject.members,
       );
       request(server)
         .get(`/board/members/${boardId}`)
@@ -78,21 +76,21 @@ describe('Get board team members', () => {
     const boardId = 12;
     const requestBody = {
       role: 'ADMIN',
-      member: 'abc'
+      member: 'abc',
     };
-    test('return 404 if board id not passed', done => {
+    test('return 404 if board id not passed', (done) => {
       request(server)
         .patch('/board/member/')
         .expect(404, done);
     });
 
-    test('return 400 if role is not present', done => {
+    test('return 400 if role is not present', (done) => {
       request(server)
         .patch(`/board/member/${boardId}`)
         .send({ role: 'ADMIN' })
         .expect(400, done);
     });
-    test('return 200', done => {
+    test('return 200', (done) => {
       const findOneAndUpdate = stub(Board, 'findOneAndUpdate').returns({});
 
       request(server)

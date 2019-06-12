@@ -1,32 +1,36 @@
 import Board from '../models/boardModel';
 import { buildResponse } from '../utils/helpers';
-import {} from '../models/issuesModel';
+import {} from '../models/issueModel';
 
 const getBoardDetails = async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  if (typeof id !== 'number') {
-    res.status(400).send(buildResponse(false, `${req.params.id} should be a number`));
+  if (isNaN(id)) {
+    console.log(`${req.params.id} is not a number`);
+    return res.status(400).send(buildResponse(false, 'Invalid request to get board details!'));
   }
   try {
-    let [board] = await Board.find({ id });
+    const [board] = await Board.find({ id }, 'lifecycles issues').populate('issues', 'title  lifeCycle comments id');
     if (!board) {
-      res.status(400).send(buildResponse(false, `No board found with id :${id}`));
+      console.log(` No board found with Id :${id}`);
+      return res.status(400).send(buildResponse(false, 'Oops! Board not found'));
     }
-    board = await Board.populate(board, { path: 'issues' });
-    if (board) {
-      const { lifecycles, issues } = board;
-      const responseObject = lifecycles.reduce(
-        (acc, lc) => Object.assign(acc, { [lc]: { issues: [] } }),
-        {},
-      );
-      issues.forEach((issue) => {
-        const { lifeCycle } = issue;
-        responseObject[lifeCycle].issues.push(issue);
-      });
-      res.status(200).send(buildResponse(true, '', { lifeCycles: responseObject }));
-    }
+    const { lifecycles, issues } = board;
+    const responseObject = lifecycles.reduce(
+      (acc, lc) => Object.assign(acc, { [lc]: { issues: [] } }),
+      {},
+    );
+    const issuesWithCommentCount = Array.from(issues).map(issue => ({
+      ...issue._doc,
+      comments: issue.comments.length,
+    }));
+    issuesWithCommentCount.forEach((issue) => {
+      const { lifeCycle } = issue;
+      responseObject[lifeCycle].issues.push(issue);
+    });
+    return res.status(200).send(buildResponse(true, '', { lifeCycles: responseObject }));
   } catch (err) {
-    res.status(500).send(buildResponse(false, `Error , ${err}`));
+    console.error(err);
+    return res.status(500).send(buildResponse(false, 'Something went wrong'));
   }
 };
 
