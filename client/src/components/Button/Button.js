@@ -1,31 +1,31 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
-import MDButton from '@material-ui/core/Button';
-import CheckIcon from '@material-ui/icons/Check';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import green from "@material-ui/core/colors/green";
+import MDButton from "@material-ui/core/Button";
+import CheckIcon from "@material-ui/icons/Check";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center"
   },
   wrapper: {
     margin: theme.spacing(1),
-    position: 'relative'
+    position: "relative"
   },
   buttonSuccess: {
-    color: '#eeeeee',
+    color: "#eeeeee",
     backgroundColor: green[500],
-    '&:hover': {
+    "&:hover": {
       backgroundColor: green[700]
     }
   },
   buttonProgress: {
     color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     marginTop: -12,
     marginLeft: -12
   },
@@ -35,10 +35,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Button = ({
+
   variant = 'contained',
   children = '',
   loading = false,
   success = false,
+  disable = false,
   ...rest
 }) => {
   const {
@@ -49,7 +51,7 @@ const Button = ({
     hideText
   } = useStyles();
 
-  const buttonClassName = success ? buttonSuccess : '';
+  const buttonClassName = success ? buttonSuccess : "";
   if (success) loading = false;
 
   return (
@@ -58,7 +60,7 @@ const Button = ({
         <MDButton
           variant={variant}
           className={buttonClassName}
-          disabled={loading}
+          disabled={loading || disable}
           {...rest}
         >
           {success && <CheckIcon />}

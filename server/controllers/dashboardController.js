@@ -23,7 +23,7 @@ async function addBoardToDashboard(userId, boardId) {
       return true;
     }
   } catch (exception) {
-    console.log(exception);
+    return false;
   }
   return false;
 }
@@ -48,7 +48,8 @@ const addBoard = async (req, res) => {
     await addBoardToDashboard(userId, resBoard._id);
     return res.status(200).send(buildResponse(true, 'successfully added Board'));
   } catch (exception) {
-    res.status(500).send(buildResponse(false, `Error occured, ${exception}`));
+    console.log(exception);
+    return res.status(500).send(buildResponse(false, `Error occured, ${exception}`));
   }
 };
 
@@ -63,10 +64,17 @@ const getBoardList = async (req, res) => {
         select: { name: 1 },
       },
     });
-    res.send(buildResponse(true, '', dashboard.boards));
+    const otherBoards = [];
+    const ownBoards = dashboard.boards.filter((board) => {
+      if (!board.owner._id.equals(userId)) {
+        otherBoards.push(board);
+      }
+      return board.owner._id.equals(userId);
+    });
+    res.send(buildResponse(true, '', { ownBoards, otherBoards }));
   } catch (exception) {
+    console.log(exception);
     res.status(500).send(buildResponse(false, `${exception}`));
   }
 };
-
 module.exports = { addBoard, getBoardList };
