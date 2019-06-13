@@ -4741,6 +4741,11 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
+sinon-mongoose@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/sinon-mongoose/-/sinon-mongoose-2.3.0.tgz#5b178606551a46368c9cb269b0d4d477ca3e1436"
+  integrity sha512-d0rrL53wuDDs91GMCFAvQam64IpdVfkaxA4cGLTZfw1d5tTg6+F/D7F080d1n3d1gSHJBZLUf9pGpijC/x7xKQ==
+
 sinon@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/sinon/-/sinon-7.3.2.tgz#82dba3a6d85f6d2181e1eca2c10d8657c2161f28"

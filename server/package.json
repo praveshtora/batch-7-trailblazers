@@ -6,7 +6,7 @@
     "build": "yarn babel . -d dist --ignore 'node_modules/**/*.js' --ignore 'dist/**' --source-maps",
     "serve": "yarn && yarn build && node dist/app.js",
     "start": "nodemon --exec babel-node app.js",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
@@ -28,6 +28,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "sinon": "^7.3.2",
+    "sinon-mongoose": "^2.3.0",
     "supertest": "^4.0.2"
   },
   "devDependencies": {

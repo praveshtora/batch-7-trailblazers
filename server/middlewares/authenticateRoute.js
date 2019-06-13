@@ -1,8 +1,10 @@
 import { buildResponse } from '../utils/helpers';
 
 export default (req, res, next) => {
-  console.log(req.user);
-  if (process.env.NODE_ENV === 'test') return next();
+  if (process.env.NODE_ENV === 'test') {
+    req.user = { id: '5cf9425d064475090357aa87' };
+    return next();
+  }
   if (req.isAuthenticated()) return next();
 
   const errorMessage = 'User is not authenticated!';
