@@ -17,7 +17,7 @@ describe('Dashboard screen APIs', () => {
     beforeEach(() => {
       requestBody = {
         name: 'Pesto',
-        lifecycles: ['to-do', 'in-progress', 'done'],
+        lifecycles: ['to-do', 'in-progress', 'done']
       };
     });
 
@@ -26,14 +26,14 @@ describe('Dashboard screen APIs', () => {
       database.disconnectDB();
     });
 
-    test('Should return 404 if user id not passed in params found', (done) => {
+    test('Should return 404 if user id not passed in params found', done => {
       request(server)
         .post('/dashboard/add')
         .send(requestBody)
         .expect(404, done);
     });
 
-    test('Should return 400 if board name not provided', (done) => {
+    test('Should return 400 if board name not provided', done => {
       requestBody.name = '';
       request(server)
         .post(`/dashboard/add/${userId}`)
@@ -41,7 +41,7 @@ describe('Dashboard screen APIs', () => {
         .expect(400, done);
     });
 
-    test('Should return 400 if board lifecycle is required not provided', (done) => {
+    test('Should return 400 if board lifecycle is required not provided', done => {
       requestBody.lifecycles = [];
       request(server)
         .post(`/dashboard/add/${userId}`)
@@ -49,14 +49,19 @@ describe('Dashboard screen APIs', () => {
         .expect(400, done);
     });
 
-    test('Should return 200 if board name and userid provided', (done) => {
-      const save = stub(Board.prototype, 'save').returns({ _id: 'test', name: 'Pesto' });
-      const findOneDashboard = stub(Dashboard, 'findOneAndUpdate').returns({ userId });
+    test('Should return 200 if board name and userid provided', done => {
+      const save = stub(Board.prototype, 'save').returns({
+        _id: 'test',
+        name: 'Pesto'
+      });
+      const findOneDashboard = stub(Dashboard, 'findOneAndUpdate').returns({
+        userId
+      });
       request(server)
         .post(`/dashboard/add/${userId}`)
         .send(requestBody)
         .expect(200)
-        .end((err) => {
+        .end(err => {
           if (err) return done(err);
           save.restore();
           findOneDashboard.restore();
@@ -77,24 +82,33 @@ describe('Dashboard screen APIs', () => {
         {
           name: 'amazon',
           owner: {
-            _id: '5cf9425d064475090357aa87',
-            name: 'manish zanzad',
-          },
+            _id: Object('5cf9425d064475090357aa87'),
+            name: 'manish zanzad'
+          }
         },
         {
           name: 'flipkat',
           owner: {
-            _id: '5cf9425d064475090357aa87',
-            name: 'manish zanzad',
-          },
-        },
-      ],
+            _id: Object('5cf9425d064475090357aa87'),
+            name: 'manish zanzad'
+          }
+        }
+      ]
     };
 
-    test('Should return 200', (done) => {
-      const findOneDashboard = stub(Dashboard, 'findOne').returns(resultObject);
-      const populateDashboard = stub(Dashboard.prototype, 'populate').returns(resultObject);
-      
+    test('Should return 200', done => {
+      const findOneDashboard = stub(Dashboard, 'findOne').returns({
+        _id: 'sadsds',
+        populate: () => {
+          return {
+            boards: []
+          };
+        }
+      });
+      const populateDashboard = stub(Dashboard.prototype, 'populate').returns(
+        resultObject.data
+      );
+
       request(server)
         .get(`/dashboard/getboards/${userId}`)
         .expect(200, () => {
