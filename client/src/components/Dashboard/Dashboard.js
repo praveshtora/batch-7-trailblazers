@@ -1,27 +1,30 @@
-import React, { Fragment, useEffect, useState } from "react";
-import Board from "./Board";
-import "./../../App.css";
-import { Typography, Grid } from "@material-ui/core";
-import { SERVER_URL } from "./../../config";
-import AddBoardModel from "../CommonComponents/Modal";
-import AddBoardForm from "./AddBoardForm";
-import axios from "axios";
+import React, { Fragment, useEffect, useState } from 'react';
+import Board from './Board';
+import './../../App.css';
+import { Typography, Grid } from '@material-ui/core';
+import { SERVER_URL } from './../../config';
+import AddBoardModel from '../CommonComponents/Modal';
+import AddBoardForm from './AddBoardForm';
+import axios from 'axios';
+import { useSnackBar } from './../../customHooks';
+import AppMenu from '../AppMenu/AppMenu';
 
 export default function Dashboard(props) {
   const [openAddModel, setOpenAddModel] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [ownBoards, setOwnBoards] = useState([]);
   const [otherBoards, setOtherBoards] = useState([]);
+  const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
     fetchBoardList();
-  }, [fetchBoardList, props]);
+  }, [props]);
 
   async function fetchBoardList() {
     try {
-      const result = await axios("/dashboard/getboards",{
-        method :'get',
-        withCredentials:true,
+      const result = await axios('/dashboard/getboards', {
+        method: 'get',
+        withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
       });
       const boards = result.data.data;
@@ -29,10 +32,10 @@ export default function Dashboard(props) {
       if (result.data.isSuccess) {
         const { ownBoards = [], otherBoards = [] } = boards;
         setOwnBoards(ownBoards);
-        otherBoards(otherBoards);
+        setOtherBoards(otherBoards);
       } else {
         setOwnBoards([]);
-        otherBoards([]);
+        setOtherBoards([]);
       }
     } catch (exception) {
       console.log(exception);
@@ -43,8 +46,8 @@ export default function Dashboard(props) {
     setOpenAddModel(true);
   }
 
-  function goToBoard() {
-    console.log("go to the board");
+  function goToBoard(boardId) {
+    props.history.push(`/boarddetails/${boardId}`);
   }
 
   const handleModalClose = function() {
@@ -57,32 +60,40 @@ export default function Dashboard(props) {
   };
 
   async function saveBoardData(data) {
-    console.log(data);
     try {
       const result = await axios({
-        url: `${SERVER_URL}/dashboard/add`,
-        method: "post",
+        url: `/dashboard/add`,
+        method: 'post',
         data,
-        headers: { "Content-Type": "application/json" }
+        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' }
       });
-
-      if (result.isSuccess) {
+      const { isSuccess, message } = result.data;
+      if (isSuccess) {
         setIsSaving(false);
+        openSnackBar('success', message);
         handleModalClose();
-        alert(result.message);
+        fetchBoardList();
       } else {
-        alert(result.message);
+        openSnackBar('error', message);
       }
-    } catch (exception) {
-      console.log(exception);
+    } catch (error) {
+      if (error.response) {
+        const { isSuccess, message } = error.response.data;
+        if (!isSuccess) {
+          openSnackBar('error', message);
+        }
+      }
+      console.log(error);
     }
   }
 
   return (
     <Fragment>
+      <AppMenu title="Dashboard"></AppMenu>
       <Grid container>
         <Grid item xs={12}>
-          <h3 className="left-margin-25">Personal</h3>
+          <h3>Personal</h3>
         </Grid>
       </Grid>
       <Grid container>
@@ -105,7 +116,9 @@ export default function Dashboard(props) {
               key={index}
               showAction={true}
               backgroundColor="#76a1e8"
-              afterClick={goToBoard}
+              afterClick={() => {
+                goToBoard(board.id);
+              }}
             >
               <Typography
                 variant="h6"
@@ -122,7 +135,7 @@ export default function Dashboard(props) {
         <div>
           <Grid container>
             <Grid item xs={12}>
-              <h3 className="left-margin-25">Others</h3>
+              <h3>Others</h3>
             </Grid>
           </Grid>
           <Grid container>
@@ -147,7 +160,7 @@ export default function Dashboard(props) {
           </Grid>
         </div>
       ) : (
-        ""
+        ''
       )}
 
       <AddBoardModel

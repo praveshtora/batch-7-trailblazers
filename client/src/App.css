@@ -70,6 +70,10 @@
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
     0px 5px 8px 0px rgba(0, 0, 0, 0.14);
 }
+
+.app-body {
+  margin: 0px 25px 0px 25px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -2,7 +2,7 @@ import Joi from '@hapi/joi';
 import Board from '../models/boardModel';
 import Dashboard from '../models/dashboardModel';
 import { buildResponse } from '../utils/helpers';
-import constants from '../config/constants';
+import { ROLES_ENUM } from '../utils/constants';
 
 function validateBoard(request) {
   const validationSchema = Joi.object().keys({
@@ -41,7 +41,7 @@ const addBoard = async (req, res) => {
     const newBoard = {
       ...req.body,
       owner,
-      members: [{ user: userId, role: constants.ROLES_ENUM.SUPER_ADMIN }],
+      members: [{ user: userId, role: ROLES_ENUM.SUPER_ADMIN }],
     };
     const boardModel = new Board(newBoard);
     const resBoard = await boardModel.save();
@@ -58,7 +58,7 @@ const getBoardList = async (req, res) => {
     const userId = req.user.id;
     const dashboard = await Dashboard.findOne({ userId }).populate({
       path: 'boards',
-      select: { name: 1, owner: 1 },
+      select: { id: 1, name: 1, owner: 1 },
       populate: {
         path: 'owner',
         select: { name: 1 },

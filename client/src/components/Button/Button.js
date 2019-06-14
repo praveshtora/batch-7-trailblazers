@@ -66,7 +66,11 @@ const Button = ({
           {success && <CheckIcon />}
           {loading
             ? React.Children.map(children, child =>
-                React.cloneElement(child, { className: hideText })
+                typeof child !== 'string' ? (
+                  React.cloneElement(child, { className: hideText })
+                ) : (
+                  <span className={hideText}>{child}</span>
+                )
               )
             : children}
         </MDButton>

@@ -1,4 +1,4 @@
-  import React, { useState, useEffect } from 'react';
+  import React, { useState, useEffect, Fragment } from 'react';
   import { SERVER_URL } from './../../../config';
   import {
     Typography,
@@ -20,7 +20,7 @@
   import Modal from './../../CommonComponents/Modal';
   import Button from './../../Button';
   import constants from './../../../constants';
-
+  import AppMenu from './../../AppMenu/AppMenu'; 
   const MemberList = function(props) {
     const [members, setMembers] = useState([]);
     const [showLoader, setShowLoader] = useState(true);
@@ -28,6 +28,7 @@
     const [ openConfirmationModal, setOpenConfirmationModal ] = useState(false);
     const [ memberToBeDelete, setMemberToBeDelete ] = useState({});
     const { SUPER_ADMIN, ADMIN, USER } = constants.ROLES;
+    const boardId = props.match.params.id;
 
     useEffect(() => {
       fetchBoardMembers();
@@ -35,7 +36,7 @@
 
     async function fetchBoardMembers() {
       try {
-        const result = await axios(SERVER_URL + "/board/members/86");
+        const result = await axios(`/board/members/${boardId}`);
         setMembers(result.data.data);
         setShowLoader(false);
       }
@@ -50,7 +51,7 @@
     const updateBoardMember = async data => {
       try {
         const response = await axios({
-          url: `${SERVER_URL}/board/member/86`,
+          url: `/board/member/${boardId}`,
           method: "patch",
           data
         });
@@ -82,7 +83,7 @@
       closeConfirmationModal();
       try {
       const result = await axios({
-        url: SERVER_URL + "/board/member/86",
+        url: `/board/member/${boardId}`,
         method: 'delete',
         data: {member: memberToBeDelete._id}
       });  
@@ -105,14 +106,28 @@
     const closeConfirmationModal = () => {
       setOpenConfirmationModal(false);
     }
-    return showLoader ? (
+
+    const getRolesHumanReadableName = (role) => {
+      switch(role){
+        case SUPER_ADMIN:
+          return "Super Admin";
+          break;
+        case ADMIN:
+          return "Admin";
+          break;
+        case USER:
+            return "User";
+            break;
+      }
+    }
+    return <Fragment>
+      <AppMenu title="Board Members"></AppMenu>
+    {showLoader ? (
       <CircularProgress className="loader-center" />
     ) : (
-      <div className="member-table">
-        <Paper>
-          <Typography variant="h6" id="tableTitle" className="table-heading">
-            Board Members
-          </Typography>
+      <div style={{textAlign:"center"}}>
+        <Paper className="member-table">
+         
           <Table>
             <TableHead>
               <TableRow>
@@ -131,7 +146,7 @@
                       {row.user.name}
                     </TableCell>
                     <TableCell align="center">
-                      <Chip label={row.role} color="primary" />
+                      <Chip label={getRolesHumanReadableName(row.role)} color="primary" />
                     </TableCell>
                     <TableCell align="center">
                       {row.role !== SUPER_ADMIN && (
@@ -166,7 +181,8 @@
             onConfirm={handleMemberDelete}
             />
       </div>
-    );
+    )}
+    </Fragment>;
   };
 
   const DeleteModal = ({user, openModal, onClose, onConfirm}) => {

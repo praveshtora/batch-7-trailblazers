@@ -1,7 +1,8 @@
 import Joi from '@hapi/joi';
 import Board from '../models/boardModel';
-import constants from '../config/constants';
+import { ROLES_ENUM, SERVER_ERROR_MESSAGE } from '../utils/constants';
 import { buildResponse } from '../utils/helpers';
+
 const getMembers = async function (req, res) {
   try {
     const validationSchema = Joi.object().keys({
@@ -26,7 +27,7 @@ const getMembers = async function (req, res) {
     return res.send(buildResponse(true, '', board.members));
   } catch (exception) {
     console.log(exception);
-    return res.status(500).send(buildResponse(false, constants.SERVER_ERROR_MESSAGE));
+    return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
   }
 };
 
@@ -47,7 +48,7 @@ const updateMemberRole = async function (req, res) {
     const boardId = req.params.id;
     const newRole = req.body.role;
     const { member } = req.body;
-    if (!constants.ROLES_ENUM[newRole]) {
+    if (!ROLES_ENUM[newRole]) {
       res.status(406).send(buildResponse(false, 'Role does not exist'));
     }
     const board = await Board.findOneAndUpdate(
@@ -61,7 +62,7 @@ const updateMemberRole = async function (req, res) {
     return res.send(buildResponse(true, 'Member role updated successfully'));
   } catch (exception) {
     console.log(exception);
-    return res.status(500).send(buildResponse(false, constants.SERVER_ERROR_MESSAGE));
+    return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
   }
 };
 
@@ -98,7 +99,7 @@ const deleteMember = async function (req, res) {
     return res.send(buildResponse(true, 'Member deleted successfully'));
   } catch (exception) {
     console.log(exception);
-    return res.status(500).send(buildResponse(false, constants.SERVER_ERROR_MESSAGE));
+    return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
   }
 };
 

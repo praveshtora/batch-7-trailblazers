@@ -47,11 +47,6 @@ describe('<Button />', () => {
     expect(wrapper.find(CheckIcon)).toHaveLength(1);
   });
 
-  it('should not show "text" when props only "loading" passed.', () => {
-    wrapper.setProps({ success: false, loading: true });
-    expect(wrapper.text()).toEqual('');
-  });
-
   it('should pass rest of the props to Button', () => {
     wrapper.setProps({ strProp: 'testing is cool!' });
 

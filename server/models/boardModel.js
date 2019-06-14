@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import autoIncrementId from './autoIncrementModel';
-import constants from '../config/constants';
+import { ROLES_ENUM } from '../utils/constants';
 
 const { Schema } = mongoose;
 
@@ -13,7 +13,7 @@ const BoardSchema = new Schema({
   members: [
     {
       user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-      role: { type: String, enum: Object.values(constants.ROLES_ENUM) },
+      role: { type: String, enum: Object.values(ROLES_ENUM) },
       addedOn: { type: Date, default: Date.now },
     },
   ],
