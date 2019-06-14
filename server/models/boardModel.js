@@ -9,7 +9,7 @@ const BoardSchema = new Schema({
   name: { type: String, required: true },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   lifecycles: [{ type: String }],
-  issues: { type: Array, default: [] },
+  issues: [{ type: Schema.Types.ObjectId, ref: 'Issue', default: [] }],
   members: [
     {
       user: { type: Schema.Types.ObjectId, ref: 'User', required: true },

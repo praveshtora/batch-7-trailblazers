@@ -4,7 +4,7 @@ import {} from '../models/issueModel';
 
 const getBoardDetails = async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  if (isNaN(id)) {
+  if (Number.isNaN(id)) {
     console.log(`${req.params.id} is not a number`);
     return res.status(400).send(buildResponse(false, 'Invalid request to get board details!'));
   }
@@ -19,13 +19,13 @@ const getBoardDetails = async (req, res) => {
       (acc, lc) => Object.assign(acc, { [lc]: { issues: [] } }),
       {},
     );
-    const issuesWithCommentCount = Array.from(issues).map(issue => ({
-      ...issue._doc,
-      comments: issue.comments.length,
-    }));
-    issuesWithCommentCount.forEach((issue) => {
+    issues.forEach((issue) => {
+      const issueTobeSent = {
+        ...issue._doc,
+        comments: issue.comments.length,
+      };
       const { lifeCycle } = issue;
-      responseObject[lifeCycle].issues.push(issue);
+      responseObject[lifeCycle].issues.push(issueTobeSent);
     });
     return res.status(200).send(buildResponse(true, '', { lifeCycles: responseObject }));
   } catch (err) {
