@@ -1,0 +1,12 @@
+.issue-card {
+  margin: 8px;
+}
+
+.issue-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.draggable-container {
+  cursor: pointer !important;
+}

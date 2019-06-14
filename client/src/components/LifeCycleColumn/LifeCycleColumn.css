@@ -1,0 +1,9 @@
+.LifeCycleColumn {
+  margin: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #eeeeee;
+  min-width: 280px;
+  position: relative;
+}

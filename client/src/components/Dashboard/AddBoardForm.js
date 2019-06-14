@@ -6,18 +6,18 @@ import Icon from "@material-ui/core/Icon";
 
 export default function AddBoardForm(props) {
   const [name, setName] = useState("");
-  const [lifecycle, setLifecycle] = useState("");
-  const [lifecycles, setLifecycles] = useState([]);
+  const [lifeCycle, setLifeCycle] = useState("");
+  const [lifeCycles, setLifeCycles] = useState([]);
   const [error, setError] = useState({ message: "", show: false });
 
-  const addLifecycle = function() {
-    if (!lifecycle) {
+  const addLifeCycle = function() {
+    if (!lifeCycle) {
       return;
     }
 
-    if (lifecycles.indexOf(lifecycle.toLowerCase()) === -1) {
-      setLifecycles([...lifecycles, lifecycle.toLowerCase()]);
-      setLifecycle("");
+    if (lifeCycles.indexOf(lifeCycle.toLowerCase()) === -1) {
+      setLifeCycles([...lifeCycles, lifeCycle.toLowerCase()]);
+      setLifeCycle("");
     } else {
       setError({ message: "already exists", show: true });
       setTimeout(() => {
@@ -27,16 +27,16 @@ export default function AddBoardForm(props) {
   };
 
   const deleteLifecycyle = index => {
-    const lifeCyclesClone = Object.assign([], lifecycles);
+    const lifeCyclesClone = Object.assign([], lifeCycles);
     lifeCyclesClone.splice(index, 1);
-    setLifecycles(lifeCyclesClone);
+    setLifeCycles(lifeCyclesClone);
   };
 
   const onFormSave = event => {
     event.preventDefault();
     props.onSave({
       name,
-      lifecycles
+      lifeCycles
     });
   };
 
@@ -61,19 +61,19 @@ export default function AddBoardForm(props) {
         <Grid container>
           <Grid item xs={10}>
             <TextField
-              id="lifecycle"
-              label="Lifecycle"
+              id="lifeCycle"
+              label="LifeCycle"
               margin="normal"
-              value={lifecycle}
+              value={lifeCycle}
               onChange={evt => {
                 setError({ message: "", show: false });
-                setLifecycle(evt.target.value);
+                setLifeCycle(evt.target.value);
               }}
               fullWidth
             />
           </Grid>
           <Grid item xs={2}>
-            <Button onClick={addLifecycle}>
+            <Button onClick={addLifeCycle}>
               <Icon>add</Icon>
             </Button>
           </Grid>
@@ -89,11 +89,11 @@ export default function AddBoardForm(props) {
         </Grid>
         <Grid container>
           <Grid item xs={12}>
-            {lifecycles.map((lifecycle, index) => {
+            {lifeCycles.map((lifeCycle, index) => {
               return (
                 <Chip
                   avatar={<Avatar>{index + 1}</Avatar>}
-                  label={lifecycle}
+                  label={lifeCycle}
                   onDelete={() => {
                     deleteLifecycyle(index);
                   }}
@@ -111,7 +111,7 @@ export default function AddBoardForm(props) {
             <Button
               type="submit"
               loading={props.isSaving}
-              disable={!name || lifecycles.length === 0}
+              disable={!name || lifeCycles.length === 0}
             >
               Save
             </Button>

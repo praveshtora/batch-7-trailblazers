@@ -1,6 +1,8 @@
 import React, {Fragment, useState} from 'react';
-import { Icon, Popover, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Icon, Popover, List, ListItem, ListItemText, Box } from '@material-ui/core';
 import AppMenu from '../AppMenu/AppMenu';
+import KanbanView from '../KanbanView';
+
 const BoardDetails = props => {
   const boardId = props.match.params.id;
   const [settingAnchorEl, setsettingAnchorEl] = useState(null);
@@ -8,11 +10,9 @@ const BoardDetails = props => {
 
   const handleSettingClick = function(event) {
     setsettingAnchorEl(event.currentTarget);
-    //props.history.push(`setting/${boardId}`);
   }
 
   const goToMembers = () => {
-    console.log("In");
     props.history.push(`setting/${boardId}`);
   }
   return (
@@ -42,6 +42,9 @@ const BoardDetails = props => {
         </List>
       </Popover>
     </AppMenu>
+    <Box m={1}>
+      <KanbanView boardId={props.match.params.id} />
+    </Box>
     </Fragment>
   );
 };

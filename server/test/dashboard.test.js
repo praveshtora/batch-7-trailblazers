@@ -18,7 +18,7 @@ describe('Dashboard screen APIs', () => {
     beforeEach(() => {
       requestBody = {
         name: 'Pesto',
-        lifecycles: ['to-do', 'in-progress', 'done'],
+        lifeCycles: ['to-do', 'in-progress', 'done'],
       };
     });
 
@@ -36,7 +36,7 @@ describe('Dashboard screen APIs', () => {
     });
 
     test('Should return 400 if board lifecycle is required not provided', (done) => {
-      requestBody.lifecycles = [];
+      requestBody.lifeCycles = [];
       request(server)
         .post('/dashboard/add')
         .send(requestBody)
@@ -97,7 +97,7 @@ describe('Dashboard screen APIs', () => {
         .chain('populate')
         .withArgs({
           path: 'boards',
-          select: { name: 1, owner: 1 },
+          select: { id: 1, name: 1, owner: 1 },
           populate: {
             path: 'owner',
             select: { name: 1 },

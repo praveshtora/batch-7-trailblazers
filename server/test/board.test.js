@@ -6,7 +6,7 @@ import database from '../config/database';
 import Board from '../models/boardModel';
 
 const boardMock = {
-  lifecycles: ['to-do', 'in-porgress', 'complete'],
+  lifeCycles: ['to-do', 'in-porgress', 'complete'],
   issues: [
     {
       _doc: {
@@ -98,7 +98,7 @@ describe('Get Board details got Kanban test', () => {
     const board = mock(Board);
     board
       .expects('find')
-      .withArgs({ id: 200 }, 'lifecycles issues')
+      .withArgs({ id: 200 }, 'lifeCycles issues')
       .chain('populate')
       .withArgs('issues', 'title  lifeCycle comments id')
       .resolves([boardMock]);

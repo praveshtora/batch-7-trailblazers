@@ -75,7 +75,7 @@ const SnackBarContentWrapper = React.forwardRef((props, ref) => {
         </span>
       }
       ref={ref}
-      action={[<CloseAction onClose={onClose} />]}
+      action={<CloseAction onClose={onClose} />}
       {...other}
     />
   );

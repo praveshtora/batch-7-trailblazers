@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Board from './Board';
 import './../../App.css';
 import { Typography, Grid } from '@material-ui/core';
-import { SERVER_URL } from './../../config';
 import AddBoardModel from '../CommonComponents/Modal';
 import AddBoardForm from './AddBoardForm';
 import axios from 'axios';
@@ -16,30 +15,30 @@ export default function Dashboard(props) {
   const [otherBoards, setOtherBoards] = useState([]);
   const { openSnackBar } = useSnackBar();
 
-  useEffect(() => {
-    fetchBoardList();
-  }, [props]);
+  useEffect(fetchBoardList, []);
 
-  async function fetchBoardList() {
-    try {
-      const result = await axios('/dashboard/getboards', {
-        method: 'get',
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const boards = result.data.data;
+  function fetchBoardList() {
+    (async () => {
+      try {
+        const result = await axios('/dashboard/getboards',{
+          method :'get',
+          withCredentials:true,
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const boards = result.data.data;        
 
-      if (result.data.isSuccess) {
-        const { ownBoards = [], otherBoards = [] } = boards;
-        setOwnBoards(ownBoards);
-        setOtherBoards(otherBoards);
-      } else {
-        setOwnBoards([]);
-        setOtherBoards([]);
+        if (result.data.isSuccess) {
+          const { ownBoards = [], otherBoards = [] } = boards;
+          setOwnBoards(ownBoards);
+          setOtherBoards(otherBoards);
+        } else {
+          setOwnBoards([]);
+          setOtherBoards([]);
+        }
+      } catch (exception) {
+        console.log(exception);
       }
-    } catch (exception) {
-      console.log(exception);
-    }
+    })();
   }
 
   function showAddBoardModel() {
@@ -116,9 +115,7 @@ export default function Dashboard(props) {
               key={index}
               showAction={true}
               backgroundColor="#76a1e8"
-              afterClick={() => {
-                goToBoard(board.id);
-              }}
+              afterClick={() => goToBoard(board.id)}
             >
               <Typography
                 variant="h6"
@@ -145,7 +142,7 @@ export default function Dashboard(props) {
                   key={index}
                   showAction={true}
                   backgroundColor="#76a1e8"
-                  afterClick={goToBoard}
+                  afterClick={() => goToBoard(board.id)}
                 >
                   <Typography
                     variant="h6"

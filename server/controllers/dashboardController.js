@@ -7,7 +7,7 @@ import { ROLES_ENUM } from '../utils/constants';
 function validateBoard(request) {
   const validationSchema = Joi.object().keys({
     name: Joi.string().required(),
-    lifecycles: Joi.array()
+    lifeCycles: Joi.array()
       .items(Joi.string().required())
       .unique()
       .required(),
