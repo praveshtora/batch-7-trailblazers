@@ -8,6 +8,7 @@ const IssueSchema = new mongoose.Schema({
   asignee: { type: String, default: '' },
   lifeCycle: { type: String, required: true },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', default: [] }],
+  dueDate: { type: Date },
 });
 
 async function prepProcess(next) {

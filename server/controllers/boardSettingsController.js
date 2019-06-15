@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import Board from '../models/boardModel';
+import Issue from '../models/issueModel';
 import { ROLES_ENUM, SERVER_ERROR_MESSAGE } from '../utils/constants';
 import { buildResponse } from '../utils/helpers';
 
@@ -51,7 +52,7 @@ const updateMemberRole = async function (req, res) {
     if (!ROLES_ENUM[newRole]) {
       res.status(406).send(buildResponse(false, 'Role does not exist'));
     }
-    const board = await Board.findOneAndUpdate(
+    await Board.findOneAndUpdate(
       { id: boardId, 'members.user': member },
       {
         $set: {
@@ -79,22 +80,29 @@ const deleteMember = async function (req, res) {
       return res.status(400).send(response);
     }
 
-    // check login user is admin or superadmin - pending
     const boardId = req.params.id;
     const { member } = req.body;
-    // update all issues related with member should be not assigned - pending
+
     const board = await Board.findOne({
       id: boardId,
       'members.user': member,
-    });
+    }).select('issues');
     if (!board) {
       return res.status(400).send(buildResponse(false, 'Member does not present in board'));
     }
-    
+
     await Board.findOneAndUpdate(
       { id: boardId, 'members.user': member },
       { $pull: { members: { user: member } } },
     );
+
+    // set all issues assginee related with member should be not assigned
+    if (board.issues.length > 0) {
+      await Issue.updateMany(
+        { _id: { $in: board.issues }, asignee: member },
+        { $set: { asignee: '' } }
+      );
+    }
 
     return res.send(buildResponse(true, 'Member deleted successfully'));
   } catch (exception) {
@@ -103,4 +111,8 @@ const deleteMember = async function (req, res) {
   }
 };
 
-export default { getMembers, updateMemberRole, deleteMember };
+export default {
+  getMembers,
+  updateMemberRole,
+  deleteMember,
+};
