@@ -4,19 +4,15 @@ import { buildResponse, joiValidate } from '../utils/helpers';
 import { SIGNUP_FIELDS_SCHEMA } from '../utils/constants';
 
 const signUp = async (req, res, next) => {
-  const error = joiValidate(req.body, SIGNUP_FIELDS_SCHEMA);
-  if (error) {
-    const [{ message }] = error.details;
-    const response = buildResponse(false, message);
-    return res.status(400).send(response);
-  }
+  const [isValid, response] = joiValidate(req.body, SIGNUP_FIELDS_SCHEMA);
+  if (!isValid) return res.status(400).send(response);
+
   const { email, name, password } = req.body;
   try {
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
-      const errorMessage = `Email '${email}' already in use`;
-      const response = buildResponse(false, errorMessage);
-      return res.status(400).send(response);
+      const errorMessage = 'This email is already in use!';
+      return res.status(400).send(buildResponse(false, errorMessage));
     }
     const user = new User({ name, email, password });
     const newlyAddedUser = await user.save();
@@ -25,9 +21,8 @@ const signUp = async (req, res, next) => {
       userId: newlyAddedUser._id,
     });
     await newDashboard.save();
-    const response = buildResponse(true, 'Signup successfully!');
 
-    return res.status(200).send(response);
+    return res.status(200).send(buildResponse(true, 'Signup successfully!'));
   } catch (err) {
     return next(err);
   }

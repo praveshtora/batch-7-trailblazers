@@ -5,7 +5,7 @@ const IssueSchema = new mongoose.Schema({
   id: { type: Number },
   title: { type: String, required: true },
   description: { type: String, required: true },
-  asignee: { type: String, default: '' },
+  assignee: { type: String, default: '' },
   lifeCycle: { type: String, required: true },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', default: [] }],
   dueDate: { type: Date },

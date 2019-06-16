@@ -7,7 +7,12 @@ export const buildResponse = (isSuccess, message = '', data = {}) => {
   return { isSuccess, message };
 };
 
-export const joiValidate = (body, schema) => {
-  const { error } = Joi.validate(body, schema);
-  return error || null;
+export const joiValidate = (data, schema) => {
+  const { error } = Joi.validate(data, schema);
+  if (error) {
+    const [{ message }] = error.details;
+    const response = buildResponse(false, message);
+    return [false, response];
+  }
+  return [true];
 };

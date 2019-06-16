@@ -70,7 +70,10 @@ const Login = props => {
       if (!response.data.isSuccess) throw new Error(response.data.message);
       props.history.push('/dashboard');
     } catch (err) {
-      showError(err.message);
+      if(!err.response) showError(err.message);
+
+      const { message } = err.response.data;
+      showError(message);
     }
   };
 

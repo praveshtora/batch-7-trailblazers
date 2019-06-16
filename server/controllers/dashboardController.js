@@ -1,20 +1,7 @@
-import Joi from '@hapi/joi';
 import Board from '../models/boardModel';
 import Dashboard from '../models/dashboardModel';
-import { buildResponse } from '../utils/helpers';
-import { ROLES_ENUM } from '../utils/constants';
-
-function validateBoard(request) {
-  const validationSchema = Joi.object().keys({
-    name: Joi.string().required(),
-    lifeCycles: Joi.array()
-      .items(Joi.string().required())
-      .unique()
-      .required(),
-  });
-  const { error } = Joi.validate(request, validationSchema);
-  return error;
-}
+import { buildResponse, joiValidate } from '../utils/helpers';
+import { ADD_BOARD, ROLES_ENUM } from '../utils/constants';
 
 async function addBoardToDashboard(userId, boardId) {
   try {
@@ -29,14 +16,10 @@ async function addBoardToDashboard(userId, boardId) {
 }
 const addBoard = async (req, res) => {
   try {
-    const error = validateBoard(req.body);
+    const [isValid, response] = joiValidate(req.body, ADD_BOARD);
+    if (!isValid) return res.status(400).send(response);
 
-    if (error) {
-      const [{ message }] = error.details;
-      const response = buildResponse(false, message);
-      return res.status(400).send(response);
-    }
-    const userId = req.user.id;
+    const userId = req.params.id;
     const owner = userId;
     const newBoard = {
       ...req.body,
@@ -49,7 +32,7 @@ const addBoard = async (req, res) => {
     return res.status(200).send(buildResponse(true, 'successfully added Board'));
   } catch (exception) {
     console.log(exception);
-    return res.status(500).send(buildResponse(false, `Error occured, ${exception}`));
+    return res.status(500).send(buildResponse(false, `Error occurred, ${exception}`));
   }
 };
 

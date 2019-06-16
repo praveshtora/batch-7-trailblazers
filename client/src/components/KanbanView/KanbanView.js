@@ -23,7 +23,10 @@ const KanbanView = ({ boardId }) => {
 
         onSuccess(data);
       } catch (err) {
-        showError(err.message);
+        if(!err.response) showError(err.message);
+
+        const { message } = err.response.data;
+        showError(message);
       }
     })();
   };
@@ -36,10 +39,10 @@ const KanbanView = ({ boardId }) => {
 
   useEffect(getBoards, []);
 
-  const changeLifeCycle = async (_id, finishLifeCycleName) => {
+  const changeLifeCycle = async (id, finishLifeCycleName) => {
     requestToServer(
       axios.post(`/issue/changeLifeCycle`, {
-        _id,
+        id,
         lifeCycle: finishLifeCycleName
       }),
       getBoards
@@ -56,16 +59,26 @@ const KanbanView = ({ boardId }) => {
       return;
     }
 
+    const startLifeCycleName = source.droppableId;
     const finishLifeCycleName = destination.droppableId;
 
-    const startLifeCycleName = source.droppableId;
-    const startLifeCycle = lifeCycles[startLifeCycleName].issues;
-    const startIssues = Array.from(startLifeCycle);
-    const issue = startIssues[source.index];
-
     if (startLifeCycleName !== finishLifeCycleName) {
-      const { _id } = issue;
-      changeLifeCycle(_id, finishLifeCycleName);
+      const startLifeCycle = lifeCycles[startLifeCycleName].issues;
+      const startIssues = Array.from(startLifeCycle);
+      const issue = startIssues[source.index];
+      startIssues.splice(source.index, 1);
+
+      const finishLifeCycle = lifeCycles[finishLifeCycleName].issues;
+      const finishIssues = Array.from(finishLifeCycle);
+      finishIssues.push(issue);
+
+      setLifeCycles({
+        ...lifeCycles,
+        [startLifeCycleName]: startIssues,
+        [finishLifeCycleName]: finishIssues
+      });
+
+      changeLifeCycle(issue.id, finishLifeCycleName);
     }
   };
 
