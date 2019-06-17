@@ -78,6 +78,7 @@ export default function Dashboard(props) {
         openSnackBar('error', message);
       }
     } catch (error) {
+      setIsSaving(false);
       if (error.response) {
         const { isSuccess, message } = error.response.data;
         if (!isSuccess) {

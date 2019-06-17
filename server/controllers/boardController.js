@@ -54,13 +54,13 @@ const addIssue = async function (req, res) {
     }
     const boardId = req.params.id;
 
-    const board = await Board.findOne({ id: boardId }).select('lifecycles');
+    const board = await Board.findOne({ id: boardId }).select('lifeCycles');
     if (!board) {
       return res.send(buildResponse(false, 'Board does not exist'));
     }
     const newIssue = {
       ...req.body,
-      lifeCycle: board.lifecycles[0],
+      lifeCycle: board.lifeCycles[0],
     };
 
     const issueModel = new Issue(newIssue);

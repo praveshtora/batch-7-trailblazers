@@ -35,7 +35,7 @@ function App() {
     <SnackBarProvider>
       <Header name="IsTrack" >
         <Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} 
-        onClick={handleProfileClick} button>account_circle
+        onClick={handleProfileClick}>account_circle
         </Icon>
       <Popover
           open={openProfile}
@@ -53,7 +53,7 @@ function App() {
           }}
         >
           <List component="nav">
-            <ListItem onClick={logOut} button>
+            <ListItem onClick={logOut}>
               <ListItemText primary="Logout" />
             </ListItem>
           </List>
