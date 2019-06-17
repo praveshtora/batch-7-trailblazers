@@ -19,7 +19,7 @@ const addBoard = async (req, res) => {
     const [isValid, response] = joiValidate(req.body, ADD_BOARD);
     if (!isValid) return res.status(400).send(response);
 
-    const userId = req.params.id;
+    const userId = req.user.id;
     const owner = userId;
     const newBoard = {
       ...req.body,

@@ -63,6 +63,7 @@ const Login = props => {
         url: `${SERVER_URL}/login`,
         data: { email: email.value, password: password.value },
         headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
       });
 
       if (!response || !response.data) {
@@ -73,9 +74,10 @@ const Login = props => {
       props.history.push('/dashboard');
     } catch (err) {
       if(!err.response) showError(err.message);
-
-      const { message } = err.response.data;
-      showError(message);
+      else {
+        const { message } = err.response.data;
+        showError(message);
+      }
     }
   };
 

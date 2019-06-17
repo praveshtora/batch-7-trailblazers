@@ -34,12 +34,12 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
-app.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Credentials', 'true');
-  return next();
-});
+
+if(process.env.NODE_ENV === 'development') {
+  app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+} else {
+  app.use(cors({credentials: true, origin: 'https://issuestracker-tb.netlify.com'}));
+}
 require('./config/passport');
 
 app.use('/', router);
