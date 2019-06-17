@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Board from './Board';
 import './../../App.css';
 import { Typography, Grid } from '@material-ui/core';
+import { SERVER_URL } from './../../config';
 import AddBoardModel from '../CommonComponents/Modal';
 import AddBoardForm from './AddBoardForm';
 import axios from 'axios';
@@ -20,7 +21,7 @@ export default function Dashboard(props) {
   function fetchBoardList() {
     (async () => {
       try {
-        const result = await axios('/dashboard/getboards',{
+        const result = await axios('${SERVER_URL}/dashboard/getboards',{
           method :'get',
           withCredentials:true,
           headers: { 'Content-Type': 'application/json' }
@@ -61,7 +62,7 @@ export default function Dashboard(props) {
   async function saveBoardData(data) {
     try {
       const result = await axios({
-        url: `/dashboard/add`,
+        url: `${SERVER_URL}/dashboard/add`,
         method: 'post',
         data,
         withCredentials: true,

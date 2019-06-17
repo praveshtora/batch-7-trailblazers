@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { useFormInput, useSnackBar } from '../../customHooks';
 import { SERVER_URL } from '../../config';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -59,7 +60,7 @@ const Login = props => {
     try {
       const response = await axios({
         method: 'post',
-        url: `/login`,
+        url: `${SERVER_URL}/login`,
         data: { email: email.value, password: password.value },
         headers: { 'Content-Type': 'application/json' },
       });
@@ -68,6 +69,7 @@ const Login = props => {
         throw new Error('No response from server');
       }
       if (!response.data.isSuccess) throw new Error(response.data.message);
+      Cookies.set('issue_tracker_user', response.data.data);
       props.history.push('/dashboard');
     } catch (err) {
       if(!err.response) showError(err.message);

@@ -31,7 +31,7 @@ const signUp = async (req, res, next) => {
 const login = (req, res, next) => {
   req.login(req.user, (err) => {
     if (err) return next(err);
-    const response = buildResponse(true, 'Login successfully!');
+    const response = buildResponse(true, 'Login successfully!', {name: req.user.name, email: req.user.email});
     return res.status(200).send(response);
     // return res.redirect('http://localhost:3000/dashboard');
   });

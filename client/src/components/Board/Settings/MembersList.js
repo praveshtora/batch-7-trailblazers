@@ -36,7 +36,7 @@
 
     async function fetchBoardMembers() {
       try {
-        const result = await axios(`/board/members/${boardId}`);
+        const result = await axios(`${SERVER_URL}/board/members/${boardId}`);
         setMembers(result.data.data);
         setShowLoader(false);
       }
@@ -51,7 +51,7 @@
     const updateBoardMember = async data => {
       try {
         const response = await axios({
-          url: `/board/member/${boardId}`,
+          url: `${SERVER_URL}/board/member/${boardId}`,
           method: "patch",
           data
         });
@@ -83,7 +83,7 @@
       closeConfirmationModal();
       try {
       const result = await axios({
-        url: `/board/member/${boardId}`,
+        url: `${SERVER_URL}/board/member/${boardId}`,
         method: 'delete',
         data: {member: memberToBeDelete._id}
       });  
