@@ -1,3 +1,7 @@
 .app-menu {
   margin: 5px 0px 25px 0px;
 }
+
+.MuiTypography-gutterBottom  {
+  margin-bottom: 0.45em!important;
+}

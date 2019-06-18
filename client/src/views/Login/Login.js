@@ -73,6 +73,7 @@ const Login = props => {
       Cookies.set('issue_tracker_user', response.data.data);
       props.history.push('/dashboard');
     } catch (err) {
+      console.log(err);
       if(!err.response) showError(err.message);
       else {
         const { message } = err.response.data;

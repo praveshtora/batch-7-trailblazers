@@ -1,7 +1,6 @@
   import React, { useState, useEffect, Fragment } from 'react';
   import { SERVER_URL } from './../../../config';
   import {
-    Typography,
     Table,
     TableBody,
     TableCell,
@@ -59,10 +58,12 @@
         setMembers(result.data.data);
         setShowLoader(false);
       }
-      catch(error){
-        const { isSuccess, message } = error.response.data;
-        if (!isSuccess) {
-          openSnackBar('error', message);
+      catch(error) {
+        if(error.response) {
+          const { isSuccess, message } = error.response.data;
+          if (!isSuccess) {
+            openSnackBar('error', message);
+          }
         }
       }
     }
@@ -78,10 +79,12 @@
         openSnackBar('success', message);
         fetchBoardMembers();
       }
-      catch(error){
-        const { isSuccess, message } = error.response.data;
-        if (!isSuccess) {
-          openSnackBar('error', message);
+      catch(error) {
+        if(error.response) {
+          const { isSuccess, message } = error.response.data;
+          if (!isSuccess) {
+            openSnackBar('error', message);
+          }
         }
       }
     };
@@ -101,20 +104,22 @@
       setShowLoader(true);
       closeConfirmationModal();
       try {
-      const result = await axios({
-        url: `${SERVER_URL}/board/member/${boardId}`,
-        method: 'delete',
-        data: {member: memberToBeDelete._id}
-      });  
-      fetchBoardMembers();
-    }
-    catch(error){
-      const { isSuccess, message } = error.response.data;
-      if (!isSuccess) {
-        setShowLoader(false);
-        openSnackBar('error', message);
+        const result = await axios({
+          url: `${SERVER_URL}/board/member/${boardId}`,
+          method: 'delete',
+          data: {member: memberToBeDelete._id}
+        });  
+        fetchBoardMembers();
       }
-    }
+      catch(error) {
+        if(error.response) {
+          const { isSuccess, message } = error.response.data;
+          if (!isSuccess) {
+            setShowLoader(false);
+            openSnackBar('error', message);
+          }
+        }
+      }
     }
 
     const openConfirmationDialog = (member) => {

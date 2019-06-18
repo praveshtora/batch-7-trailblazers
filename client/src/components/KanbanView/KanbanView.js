@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import LifeCycleColumn from '../LifeCycleColumn';
 import { useSnackBar } from '../../customHooks';
+import {SERVER_URL} from '../../config';
+
 import { DragDropContext } from 'react-beautiful-dnd';
 import './KanbanView.css';
 
@@ -32,7 +34,7 @@ const KanbanView = ({ boardId }) => {
   };
 
   const getBoards = () => {
-    requestToServer(axios.get(`/board/${boardId}`), data => {
+    requestToServer(axios.get(`${SERVER_URL}/board/${boardId}`), data => {
       setLifeCycles(data.lifeCycles);
     });
   };

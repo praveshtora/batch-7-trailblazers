@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import {
   Switch,
-  Route,
-  BrowserRouter as Router,
-  Redirect
+  Redirect,
+  withRouter
 } from 'react-router-dom';
 import Login from './views/Login';
 import Signup from './components/SignUp';
@@ -16,12 +15,10 @@ import MemberList from './components/Board/Settings/MembersList';
 import PrivateRoute, { Auth } from './components/PrivateRoute/PrivateRoute';
 import { Icon, Popover, List, ListItem, ListItemText } from '@material-ui/core';
 
-function App() {
-
+function App(props) {
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
-  const [pathname, setPathName] = useState(null);
   const openProfile = Boolean(profileAnchorEl);
-
+  const isLogin = props.location.pathname === '/login';
   const handleProfileClick = function(event) {
     setProfileAnchorEl(event.currentTarget);
   }
@@ -30,13 +27,13 @@ function App() {
     Auth.logout();
     setProfileAnchorEl(null);
   }
-
+  
   return (
     <SnackBarProvider>
       <Header name="IsTrack" >
-        <Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} 
+        {isLogin ? <label></label> : (<Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} 
         onClick={handleProfileClick}>account_circle
-        </Icon>
+        </Icon>)}
       <Popover
           open={openProfile}
           onClose={()=> {
@@ -53,15 +50,14 @@ function App() {
           }}
         >
           <List component="nav">
-            <ListItem onClick={logOut}>
-              <ListItemText primary="Logout" />
+            <ListItem onClick={logOut} button>
+              <ListItemText primary="Logout"/>
             </ListItem>
           </List>
       </Popover>
       </Header>
     
       <div className="app-body">
-        <Router>
           <Switch>
             <PrivateRoute exact path="/login" component={Login} />
             <PrivateRoute exact path="/signup" component={Signup} />
@@ -76,13 +72,11 @@ function App() {
               path="/boarddetails/setting/:id"
               component={MemberList}
             />
-            <Redirect exact from="/" to="/login" />
             <Redirect from="/" to="/login" />
           </Switch>
-        </Router>
       </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     </SnackBarProvider>
   );
 }
 
-export default App;
+export default withRouter(App);

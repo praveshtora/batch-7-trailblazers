@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './../CommonComponents/Modal';
-import { TextField, Chip, Avatar, Grid, MenuItem } from '@material-ui/core';
+import { TextField, Grid, MenuItem } from '@material-ui/core';
 import Button from './../Button/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import './board.css';
 import './../../App.css';
 import { useFormInput } from './../../customHooks';
@@ -11,7 +10,6 @@ import { useSnackBar } from './../../customHooks';
 import { SERVER_URL } from './../../config';
 
 const AddIssueModal = props => {
-  const [open, setOpen] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [validationError, setValidationError] = useState({
     show: false,
@@ -50,8 +48,10 @@ const AddIssueModal = props => {
       setBoardMembers(result.data.data);
     }
     catch(error){
+      if(error.response) {
       const { message } = error.response.data;
         openSnackBar('error', message);
+      }
     }
   }
 

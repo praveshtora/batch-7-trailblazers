@@ -71,6 +71,12 @@
     0px 5px 8px 0px rgba(0, 0, 0, 0.14);
 }
 
+.app-menu-button {
+  margin-top: -18px;
+  height: 35px;
+  display: inline-block;
+}
+
 .app-body {
   margin: 0px 25px 0px 25px;
 }

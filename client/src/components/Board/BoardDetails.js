@@ -71,8 +71,9 @@ const BoardDetails = props => {
     <Fragment>
     <AppMenu title="Board Details">
     <div style={{float: 'right'}}>
-    <Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} onClick={handleSettingClick}>settings</Icon>
-    <Button style={{marginTop: '-18px',height: '35px'}} onClick={handleClickOpenInviteDailog}><Icon>add</Icon>Invite</Button>
+      <Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} onClick={handleSettingClick}>settings</Icon>
+      <div className="app-menu-button" ><Button onClick={()=>setOpenIssueModal(true)} ><Icon>add</Icon>New Issue</Button></div>
+      <div className="app-menu-button" ><Button onClick={handleClickOpenInviteDailog}><Icon>add</Icon>Invite</Button></div>
     </div>
 
 
@@ -92,7 +93,7 @@ const BoardDetails = props => {
         }}
       >
         <List component="nav" aria-label="Mailbox folders">
-          <ListItem onClick={goToMembers}>
+          <ListItem onClick={goToMembers} button>
             <ListItemText primary="Members" />
           </ListItem>
         </List>
@@ -123,7 +124,6 @@ const BoardDetails = props => {
           </Button>
         </DialogActions>
       </Dialog>
-    <Button onClick={()=>setOpenIssueModal(true)} ><Icon>add</Icon>New Issue</Button>
 
     <Box m={1}>
       <KanbanView boardId={props.match.params.id} />

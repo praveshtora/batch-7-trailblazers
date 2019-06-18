@@ -36,8 +36,11 @@ export default function Dashboard(props) {
           setOwnBoards([]);
           setOtherBoards([]);
         }
-      } catch (exception) {
-        console.log(exception);
+      } catch (error) {
+        if (error.response) {
+          const { isSuccess, message } = error.response.data;
+          openSnackBar('error', message);
+        }
       }
     })();
   }
