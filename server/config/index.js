@@ -2,6 +2,8 @@ const {
   PORT,
   DATABASE_CONNECTION_STRING,
   SESSION_SECRET,
+  INVITATION_EMAIL_SENDER,
+  INVITATION_EMAIL_PASSWORD,
 } = process.env;
 
 export default {
@@ -13,5 +15,9 @@ export default {
   },
   session: {
     SECRET: SESSION_SECRET || '45df84gx5',
+  },
+  emailService: {
+    INVITATION_EMAIL_PASSWORD,
+    INVITATION_EMAIL_SENDER,
   },
 };
