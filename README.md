@@ -16,32 +16,32 @@
 
 #### User and Authentication
 
-[x] User should be able to sign up / sign in
-[ ] User should be able to create teams
-[ ] The product can have multiple teams
-[x] User can invite other members
-[x] User should be able to create different Project boards
-[x] Each board can have 1 or more admins
-[ ] There should be 1 or more super admin for the entire team
-[ ] Ability to assign/ add/ change/ delete roles to user
-[x] Ability to kick someone out from team
-[x] Users should be able to view entire team
+- [x] User should be able to sign up / sign in
+- [ ] User should be able to create teams
+- [ ] The product can have multiple teams
+- [x] User can invite other members
+- [x] User should be able to create different Project boards
+- [x] Each board can have 1 or more admins
+- [ ] There should be 1 or more super admin for the entire team
+- [ ] Ability to assign/ add/ change/ delete roles to user
+- [x] Ability to kick someone out from team
+- [x] Users should be able to view entire team
 
 #### Project Board
 
-[x] User should be able to create issues
-[ ] User should be able to comment and upvote issues
-[ ] User should be able to assign issue to team member
-[ ] User should be able to attach due date to issues
-[x] Issues should have a life cycle ( should be configured while creating boards ) e.g. Todo / In progress / Done
-[x] Project should have a kanban board view to see issues in life cycle
-[x] Users can drag cards in kanban view to update life cycle of issues
+- [x] User should be able to create issues
+- [ ] User should be able to comment and upvote issues
+- [ ] User should be able to assign issue to team member
+- [ ] User should be able to attach due date to issues
+- [x] Issues should have a life cycle ( should be configured while creating boards ) e.g. Todo / In progress / Done
+- [x] Project should have a kanban board view to see issues in life cycle
+- [x] Users can drag cards in kanban view to update life cycle of issues
 
 ### Optional Features
 
-[ ] User Notification on mail
-[ ] Notification for due date and due tasks
-[ ] Issues description / comments to have media upload features
-[ ] User notification in the product
-[ ] Messaging between team members
-[ ] Anything else that you can think of / have time for.
+- [ ] User Notification on mail
+- [ ] Notification for due date and due tasks
+- [ ] Issues description / comments to have media upload features
+- [ ] User notification in the product
+- [ ] Messaging between team members
+- [ ] Anything else that you can think of / have time for.
