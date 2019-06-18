@@ -29,11 +29,30 @@
     const [ memberToBeDelete, setMemberToBeDelete ] = useState({});
     const { SUPER_ADMIN, ADMIN, USER } = constants.ROLES;
     const boardId = props.match.params.id;
+    const [ userRole, setUserRole ] = useState('USER');
 
     useEffect(() => {
       fetchBoardMembers();
+      fetchRole();
     }, [props]);
 
+    async function fetchRole() {
+      try {
+        const result = await axios(`${SERVER_URL}/board/member/role/${boardId}`,
+        {
+          withCredentials: true
+        });
+        if(result.data.data.length > 0) {
+          setUserRole(result.data.data[0].role);
+        }
+      }
+      catch(error){
+        const { isSuccess, message } = error.response.data;
+        if (!isSuccess) {
+          openSnackBar('error', message);
+        }
+      }
+    }
     async function fetchBoardMembers() {
       try {
         const result = await axios(`${SERVER_URL}/board/members/${boardId}`);
@@ -123,7 +142,9 @@
     return <Fragment>
       <AppMenu title="Board Members"></AppMenu>
     {showLoader ? (
-      <CircularProgress className="loader-center" />
+      <div style={{textAlign: 'center'}}>
+        <CircularProgress className="loader-center" />
+      </div>
     ) : (
       <div style={{textAlign:"center"}}>
         <Paper className="member-table">
@@ -133,8 +154,8 @@
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="center">Role</TableCell>
-                <TableCell align="center">Update Role</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                {userRole === USER || <TableCell align="center">Update Role</TableCell>}
+                {userRole === USER || <TableCell align="center">Actions</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -148,7 +169,7 @@
                     <TableCell align="center">
                       <Chip label={getRolesHumanReadableName(row.role)} color="primary" />
                     </TableCell>
-                    <TableCell align="center">
+                    {userRole === USER || <TableCell align="center">
                       {row.role !== SUPER_ADMIN && (
                         <Switch
                           checked={row.switch}
@@ -160,14 +181,14 @@
                           inputProps={{ "aria-label": "primary checkbox" }}
                         />
                       )}
-                    </TableCell>
-                    <TableCell align="center">
+                    </TableCell>}
+                    {userRole === USER || <TableCell align="center">
                     {row.role !== SUPER_ADMIN && (
                         <Icon style={{cursor: 'pointer'}} onClick={()=>{
                           openConfirmationDialog(row.user);
                         }}>delete</Icon>
                     )}
-                    </TableCell>
+                    </TableCell> }
                   </TableRow>
                 );
               })}

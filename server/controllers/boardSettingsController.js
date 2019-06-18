@@ -8,6 +8,7 @@ import {
   UPDATE_MEMBER_ROLE,
   DELETE_MEMBER,
 } from '../utils/constants';
+import mongoose from 'mongoose';
 
 const getMembers = async (req, res) => {
   try {
@@ -91,8 +92,29 @@ const deleteMember = async (req, res) => {
   }
 };
 
+const getRoleOfMember = async (req, res) => {
+  try {
+    const boardId = req.params.id;
+    const userId = req.user.id;
+    const board = await Board.findOne({ id: boardId }, { members: 1 });
+
+    const member = board.members.filter(mem => {
+      return mem.user.toString() === userId;
+    });
+
+    if (!member) {
+      return res.status(400).send(buildResponse(false, 'Member does not present in board'));
+    }
+    return res.send(buildResponse(true, '', member));
+  } catch (exception) {
+    console.log(exception);
+    return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
+  }
+} 
+
 export default {
   getMembers,
   updateMemberRole,
   deleteMember,
+  getRoleOfMember
 };

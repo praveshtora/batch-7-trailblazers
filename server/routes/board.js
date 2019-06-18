@@ -10,6 +10,7 @@ router.post('/issue/add/:id', board.addIssue);
 router.get('/members/:id', boardSettings.getMembers);
 router.patch('/member/:id', boardSettings.updateMemberRole);
 router.delete('/member/:id', boardSettings.deleteMember);
+router.get('/member/role/:id', boardSettings.getRoleOfMember);
 router.post('/:id/invite', authenticateRoute, board.inviteUser);
 
 module.exports = router;

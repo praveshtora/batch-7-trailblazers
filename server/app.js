@@ -34,8 +34,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-if(process.env.NODE_ENV === 'development') {
+console.log(process.env.NODE_ENV);
+if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 } else {
   app.use(cors({credentials: true, origin: 'https://issuestracker-tb.netlify.com'}));
