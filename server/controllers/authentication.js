@@ -1,9 +1,9 @@
 import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
 import { buildResponse, joiValidate } from '../utils/helpers';
-import { SIGNUP_FIELDS_SCHEMA } from '../utils/constants';
+import { SIGNUP_FIELDS_SCHEMA, SERVER_ERROR_MESSAGE } from '../utils/constants';
 
-const signUp = async (req, res, next) => {
+const signUp = async (req, res) => {
   const [isValid, response] = joiValidate(req.body, SIGNUP_FIELDS_SCHEMA);
   if (!isValid) return res.status(400).send(response);
 
@@ -24,16 +24,15 @@ const signUp = async (req, res, next) => {
 
     return res.status(200).send(buildResponse(true, 'Signup successfully!'));
   } catch (err) {
-    return next(err);
+    console.error(err);
+    return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
   }
 };
 
-const login = (req, res, next) => {
+const login = (req, res) => {
   req.login(req.user, (err) => {
-    if (err) return next(err);
-    const response = buildResponse(true, 'Login successfully!', {name: req.user.name, email: req.user.email});
-    return res.status(200).send(response);
-    // return res.redirect('http://localhost:3000/dashboard');
+    if (err) return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
+    return res.status(200).send(buildResponse(true, 'Login successfully!', {name: req.user.name, email: req.user.email}));
   });
 };
 

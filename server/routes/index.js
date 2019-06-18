@@ -1,7 +1,6 @@
 import express from 'express';
 import passport from 'passport';
 import authentication from '../controllers/authentication';
-
 import { joiValidate } from '../utils/helpers';
 import { LOGIN_FIELDS_SCHEMA } from '../utils/constants';
 
@@ -17,8 +16,8 @@ router.post(
   '/login',
   (req, res, next) => {
     const [isValid, response] = joiValidate(req.body, LOGIN_FIELDS_SCHEMA);
-    if (!isValid) res.status(400).send(response);
-    next();
+    if (!isValid) return res.status(400).send(response);
+    return next();
   },
   passport.authenticate('local'),
   authentication.login,
