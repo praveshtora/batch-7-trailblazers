@@ -10,7 +10,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4),
-    outline: 'none'
+    outline: 'none',
+    borderRadius: '5px'
   }
 }));
 

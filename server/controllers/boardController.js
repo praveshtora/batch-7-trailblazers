@@ -4,6 +4,7 @@ import { buildResponse, joiValidate } from '../utils/helpers';
 import Issue from '../models/issueModel';
 import { INVITE_EMAIL_SCHEMA, SERVER_ERROR_MESSAGE, ROLES_ENUM } from '../utils/constants';
 import User from '../models/userModel';
+import Dashboard from '../models/dashboardModel';
 
 import sendEmail from '../utils/emailService';
 
@@ -128,8 +129,11 @@ const inviteUser = async (req, res) => {
         { id: boardId },
         { $push: { members: { user: invitedUserinDB.id, role: ROLES_ENUM.USER } } },
       );
+      const inviteUserId = invitedUserinDB._id;
+      await Dashboard.findOneAndUpdate({userId: inviteUserId}, {$push: { boards: board._id }});
+
       const boardUpdated = await boardUpdatedPromise;
-      const subject = `Invitaion to collaborate on Board ${boardUpdated.name}`;
+      const subject = `Invitation to collaborate on Board ${boardUpdated.name}`;
       const body = `Hi ${invitedUserinDB.name},
       You are invited by ${userName} to collaborate on ${boardUpdated.name}
     Thanks`;

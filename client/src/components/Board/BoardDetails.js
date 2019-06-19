@@ -47,6 +47,7 @@ const BoardDetails = props => {
         url : `${SERVER_URL}/board/${boardId}/invite`,
         data : {email : inviteeEmail},
         headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
       if(response && response.data && response.data.isSuccess) {
         handleCloseInviteDailog();
