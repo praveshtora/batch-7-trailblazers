@@ -1,3 +1,4 @@
+import passport from 'passport';
 import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
 import { buildResponse, joiValidate } from '../utils/helpers';
@@ -30,10 +31,16 @@ const signUp = async (req, res) => {
 };
 
 const login = (req, res) => {
-  req.login(req.user, (err) => {
-    if (err) return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
-    return res.status(200).send(buildResponse(true, 'Login successfully!', {name: req.user.name, email: req.user.email}));
-  });
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return res.status(500).send(buildResponse(false, info)); }
+    if (!user) {
+      return res.send(buildResponse(false, info.message));
+    }
+    req.login(user, (error) => {
+      if (error) return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
+      return res.status(200).send(buildResponse(true, 'Login successfully!', { name: req.user.name, email: req.user.email }));
+    });
+  })(req, res);
 };
 
 module.exports = {

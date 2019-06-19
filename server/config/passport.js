@@ -9,7 +9,7 @@ const handleUserValidation = async (email, password, done) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return done(null, false, { message: 'Incorrect email.' });
+    return done(null, false, { message: 'Email Not Found' });
   }
   if (!user.validatePassword(password)) {
     return done(null, false, { message: 'Incorrect password.' });
