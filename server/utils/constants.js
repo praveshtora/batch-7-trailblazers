@@ -56,6 +56,15 @@ const inviteEmail = {
     .required(),
 };
 
+const updateIssueDetails = {
+  id: Joi.number().required(),
+  title: Joi.string(),
+  dueDate: Joi.date(),
+  assignee: Joi.string(),
+  description: Joi.string(),
+  newComments: Joi.array().items(Joi.string().required()),
+};
+
 const JoiObject = schema => Joi.object().keys(schema);
 
 export const SERVER_ERROR_MESSAGE = 'Some error occurred on server';
@@ -68,3 +77,4 @@ export const DELETE_MEMBER = JoiObject(deleteMember);
 export const ADD_BOARD = JoiObject(addBoard);
 export const GET_ISSUE_DETAILS = JoiObject(getIssueDetails);
 export const INVITE_EMAIL_SCHEMA = JoiObject(inviteEmail);
+export const UPDATE_ISSUE_DETAILS = JoiObject(updateIssueDetails);

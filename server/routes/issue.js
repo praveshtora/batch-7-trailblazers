@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get('/:id', authenticateRoute, Issue.getIssueDetails);
 router.post('/changeLifeCycle', Issue.changeLifeCycle);
+router.post('/update', authenticateRoute, Issue.update);
 
 module.exports = router;
