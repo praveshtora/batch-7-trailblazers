@@ -1,4 +1,4 @@
-import React, {Fragment, useState,useCallback} from 'react';
+import React, {Fragment, useState, useCallback, useRef} from 'react';
 import { Icon, Popover, List, ListItem, ListItemText, Box,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,TextField } from '@material-ui/core';
 import AppMenu from '../AppMenu/AppMenu';
 import KanbanView from '../KanbanView';
@@ -7,7 +7,6 @@ import AddIssueModal from './AddIssueModal';
 import axios from 'axios';
 import {SERVER_URL} from '../../config';
 import { useSnackBar } from '../../customHooks';
-
 
 const BoardDetails = props => {
   const boardId = props.match.params.id;
@@ -30,7 +29,7 @@ const BoardDetails = props => {
   }
 
   const afterIssueAdded = () => {
-    
+    kanbanReference.current.refreshBoard();
   }
 
   const handleClickOpenInviteDailog = () => {
@@ -66,6 +65,8 @@ const BoardDetails = props => {
   const setEmail = (e) => {
     setInviteeEmail(e.target.value)
   }
+
+  const kanbanReference = useRef();
 
   return (
     <Fragment>
@@ -126,7 +127,7 @@ const BoardDetails = props => {
       </Dialog>
 
     <Box m={1}>
-      <KanbanView boardId={props.match.params.id} />
+      <KanbanView ref={kanbanReference} boardId={props.match.params.id} />
     </Box>
 
     <AddIssueModal boardId={boardId} open={openAddIssueModal} handleClose={() => setOpenIssueModal(false)}

@@ -62,6 +62,7 @@ const Button = ({
           className={buttonClassName}
           disabled={loading || disable}
           {...rest}
+          color="primary"
         >
           {success && <CheckIcon />}
           {loading

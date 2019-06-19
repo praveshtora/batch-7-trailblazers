@@ -8,6 +8,9 @@ import AddBoardForm from './AddBoardForm';
 import axios from 'axios';
 import { useSnackBar } from './../../customHooks';
 import AppMenu from '../AppMenu/AppMenu';
+import theme from './../../theme';
+
+const PRIMARY_MAIN = theme.palette.primary.main;
 
 export default function Dashboard(props) {
   const [openAddModel, setOpenAddModel] = useState(false);
@@ -119,7 +122,7 @@ export default function Dashboard(props) {
             <Board
               key={index}
               showAction={true}
-              backgroundColor="#76a1e8"
+              backgroundColor={PRIMARY_MAIN}
               afterClick={() => goToBoard(board.id)}
             >
               <Typography
@@ -146,7 +149,7 @@ export default function Dashboard(props) {
                 <Board
                   key={index}
                   showAction={true}
-                  backgroundColor="#76a1e8"
+                  backgroundColor={PRIMARY_MAIN}
                   afterClick={() => goToBoard(board.id)}
                 >
                   <Typography

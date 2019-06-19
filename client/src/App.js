@@ -14,6 +14,8 @@ import BoardDetails from './components/Board/BoardDetails';
 import MemberList from './components/Board/Settings/MembersList';
 import PrivateRoute, { Auth } from './components/PrivateRoute/PrivateRoute';
 import { Icon, Popover, List, ListItem, ListItemText } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import theme from './theme';
 
 function App(props) {
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
@@ -29,53 +31,55 @@ function App(props) {
   }
   
   return (
-    <SnackBarProvider>
-      <Header name="IsTrack" >
-        {isLogin ? <label></label> : (<Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} 
-        onClick={handleProfileClick}>account_circle
-        </Icon>)}
-      <Popover
-          open={openProfile}
-          onClose={()=> {
-            setProfileAnchorEl(null);
-          }}
-          anchorEl = {profileAnchorEl}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-          <List component="nav">
-            <ListItem onClick={logOut} button>
-              <ListItemText primary="Logout"/>
-            </ListItem>
-          </List>
-      </Popover>
-      </Header>
-    
-      <div className="app-body">
-          <Switch>
-            <PrivateRoute exact path="/login" component={Login} />
-            <PrivateRoute exact path="/signup" component={Signup} />
-            <PrivateRoute exact path="/dashboard" component={DashBoard} />
-            <PrivateRoute
-              exact
-              path="/boarddetails/:id"
-              component={BoardDetails}
-            />
-            <PrivateRoute
-              exact
-              path="/boarddetails/setting/:id"
-              component={MemberList}
-            />
-            <Redirect from="/" to="/login" />
-          </Switch>
-      </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-    </SnackBarProvider>
+    <ThemeProvider theme={theme}>
+      <SnackBarProvider>
+        <Header name="IsTrack" >
+          {isLogin ? <label></label> : (<Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} 
+          onClick={handleProfileClick}>account_circle
+          </Icon>)}
+        <Popover
+            open={openProfile}
+            onClose={()=> {
+              setProfileAnchorEl(null);
+            }}
+            anchorEl = {profileAnchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <List component="nav">
+              <ListItem onClick={logOut} button>
+                <ListItemText primary="Logout"/>
+              </ListItem>
+            </List>
+        </Popover>
+        </Header>
+      
+        <div className="app-body">
+            <Switch>
+              <PrivateRoute exact path="/login" component={Login} />
+              <PrivateRoute exact path="/signup" component={Signup} />
+              <PrivateRoute exact path="/dashboard" component={DashBoard} />
+              <PrivateRoute
+                exact
+                path="/boarddetails/:id"
+                component={BoardDetails}
+              />
+              <PrivateRoute
+                exact
+                path="/boarddetails/setting/:id"
+                component={MemberList}
+              />
+              <Redirect from="/" to="/login" />
+            </Switch>
+        </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      </SnackBarProvider>
+    </ThemeProvider>
   );
 }
 

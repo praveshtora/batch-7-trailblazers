@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
-import { Typography, Modal, Box } from '@material-ui/core';
+import { Typography, Modal, Box, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import './../../App.css';
+import './Modal.css';
+import CloseIcon from '@material-ui/icons/Close';
+
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
@@ -11,9 +13,10 @@ const useStyles = makeStyles(theme => ({
     outline: 'none'
   }
 }));
+
 export default function CustomModal(props) {
   const classes = useStyles();
-
+  
   return (
     <Fragment>
       <Modal
@@ -23,23 +26,28 @@ export default function CustomModal(props) {
         onClose={() => {
           props.handleClose();
         }}
+        disableBackdropClick={true}
       >
         <div
           style={{ width: props.width }}
           className={classes.paper + ' modalStyle'}
         >
-          <div style={{ display: 'flex' }}>
+          <div>
             <Box
               bgcolor="primary.main"
               color="primary.contrastText"
               p={2}
               m={0}
-              className="modalHeader"
             >
-              <Typography variant="h6">{props.title}</Typography>
+              <Typography variant="h6" style={{display:'inline-block'}}>{props.title}</Typography>
+              <div className="modalCloseCross">
+                <IconButton  key="close" aria-label="Close" color="inherit" onClick={props.handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
             </Box>
           </div>
-          <div style={{ marginTop: '20px' }}>{props.children}</div>
+          <div style={{padding: '32px' }}>{props.children}</div>
         </div>
       </Modal>
     </Fragment>

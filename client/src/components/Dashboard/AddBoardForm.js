@@ -40,9 +40,15 @@ export default function AddBoardForm(props) {
     });
   };
 
+  const handleKeyPressLifeCycle = event => {
+    if(event.keyCode === 13) {
+      addLifeCycle();
+    }
+  }
+
   return (
     <Fragment>
-      <form onSubmit={onFormSave} noValidate>
+      <form noValidate>
         <Grid container>
           <Grid item xs={12}>
             <TextField
@@ -55,6 +61,7 @@ export default function AddBoardForm(props) {
                 setName(evt.target.value);
               }}
               required
+              variant="outlined"
             />
           </Grid>
         </Grid>
@@ -62,7 +69,7 @@ export default function AddBoardForm(props) {
           <Grid item xs={10}>
             <TextField
               id="lifeCycle"
-              label="LifeCycle"
+              label="Life Cycle"
               margin="normal"
               value={lifeCycle}
               onChange={evt => {
@@ -70,9 +77,11 @@ export default function AddBoardForm(props) {
                 setLifeCycle(evt.target.value);
               }}
               fullWidth
+              variant="outlined"
+              onKeyDown = {handleKeyPressLifeCycle}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={2} style={{margin:'auto'}}>
             <Button onClick={addLifeCycle}>
               <Icon>add</Icon>
             </Button>
@@ -109,7 +118,7 @@ export default function AddBoardForm(props) {
         <div style={{ marginTop: "10px" }}>
           <div className="float-right">
             <Button
-              type="submit"
+              onClick={onFormSave}
               loading={props.isSaving}
               disable={!name || lifeCycles.length === 0}
             >

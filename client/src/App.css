@@ -58,19 +58,6 @@
   font-size: 12px;
 }
 
-.modalStyle {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.modalHeader {
-  width: 100%;
-  margin-top: -65px !important;
-  text-align: center;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 5px 8px 0px rgba(0, 0, 0, 0.14);
-}
-
 .app-menu-button {
   margin-top: -18px;
   height: 35px;

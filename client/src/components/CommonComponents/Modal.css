@@ -1,0 +1,14 @@
+.modalStyle {
+  padding-top: 0px!important;
+  padding-left: 0px!important;
+  padding-right: 0px!important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modalCloseCross {
+  float: right;
+  display: inline-block;
+  margin: -8px;
+}

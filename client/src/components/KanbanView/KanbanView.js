@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react';
 import axios from 'axios';
 import LifeCycleColumn from '../LifeCycleColumn';
 import { useSnackBar } from '../../customHooks';
@@ -7,12 +7,18 @@ import {SERVER_URL} from '../../config';
 import { DragDropContext } from 'react-beautiful-dnd';
 import './KanbanView.css';
 
-const KanbanView = ({ boardId }) => {
+const KanbanView = forwardRef(({ boardId }, ref) => {
   const [lifeCycles, setLifeCycles] = useState([]);
   const { openSnackBar } = useSnackBar();
   const showError = useCallback(message => openSnackBar('error', message), [
     openSnackBar
   ]);
+
+  useImperativeHandle(ref, () => ({
+    refreshBoard() {
+      getBoards();
+    }
+  }));
 
   const requestToServer = (promise, onSuccess) => {
     (async () => {
@@ -95,6 +101,6 @@ const KanbanView = ({ boardId }) => {
       </DragDropContext>
     </div>
   );
-};
+});
 
 export default KanbanView;

@@ -122,6 +122,7 @@ const AddIssueModal = props => {
               required
               {...title}
               inputProps={{ maxLength: '100' }}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
@@ -134,6 +135,7 @@ const AddIssueModal = props => {
               fullWidth
               {...description}
               inputProps={{ maxLength: '500' }}
+              variant="outlined"
             />
           </Grid>
         </Grid>
@@ -147,6 +149,7 @@ const AddIssueModal = props => {
               margin="normal"
               fullWidth
               {...assignee}
+              variant="outlined"
             >
               {
                 boardMembers.map( (member, index) => {
