@@ -8,11 +8,11 @@ import {
 } from '../utils/constants';
 
 const getIssueDetails = async (req, res) => {
-  const [isValid, response] = joiValidate(req.body, GET_ISSUE_DETAILS);
+  const [isValid, response] = joiValidate(req.params, GET_ISSUE_DETAILS);
   if (!isValid) return res.status(400).send(response);
 
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const issue = await Issue.findOne({ id }).populate('comments');
     if (!issue) {

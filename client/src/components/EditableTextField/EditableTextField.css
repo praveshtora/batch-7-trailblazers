@@ -1,0 +1,20 @@
+.EditableTextField input,
+.EditableTextField input:focus {
+  padding: 7px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+}
+.EditableTextField input {
+  border: none;
+  background-color: transparent;
+}
+.EditableTextField input:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.EditableTextField input:focus::selection {
+  background: #fff3a3;
+}
+.EditableTextField input:focus::-moz-selection {
+  background: #fff3a3;
+}

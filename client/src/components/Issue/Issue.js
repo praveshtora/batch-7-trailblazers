@@ -38,14 +38,14 @@ const DraggableContainer = ({ id, index, children }) => (
   </Draggable>
 );
 
-const Issue = ({ issue = {}, index }) => {
+const Issue = ({ issue = {}, index, openModalIssueDetails }) => {
   const { id, title, comments } = issue;
 
   const { ContentWrapper, icon } = useStyles();
 
   return (
     <DraggableContainer id={id} index={index}>
-      <Card className="issue-card">
+      <Card className="issue-card" onClick={() => openModalIssueDetails(id)}>
         <CardContent className={ContentWrapper}>
           <span>{title}</span>
           <Box display="flex">

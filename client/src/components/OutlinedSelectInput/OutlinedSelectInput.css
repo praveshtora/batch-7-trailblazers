@@ -1,0 +1,7 @@
+.assignee-selector .MuiOutlinedInput-input {
+  padding: 12px 14px;
+}
+
+.assignee-selector .MuiInputLabel-outlined {
+  transform: translate(14px, 15px) scale(1);
+}

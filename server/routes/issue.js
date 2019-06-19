@@ -5,6 +5,6 @@ import authenticateRoute from '../middlewares/authenticateRoute';
 const router = express.Router();
 
 router.get('/:id', authenticateRoute, Issue.getIssueDetails);
-router.post('/changeLifeCycle', authenticateRoute, Issue.changeLifeCycle);
+router.post('/changeLifeCycle', Issue.changeLifeCycle);
 
 module.exports = router;
