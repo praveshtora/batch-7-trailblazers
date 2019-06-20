@@ -5,7 +5,7 @@ import authenticateRoute from '../middlewares/authenticateRoute';
 
 const router = express.Router();
 router.get('/:id', board.getBoardDetails);
-router.post('/issue/add/:id', board.addIssue);
+router.post('/issue/add/:id', authenticateRoute, board.addIssue);
 
 router.get('/members/:id', boardSettings.getMembers);
 router.patch('/member/:id', boardSettings.updateMemberRole);

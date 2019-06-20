@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useSnackBar } from './../../customHooks';
 import { SERVER_URL } from './../../config';
 import { requestToServer } from '../../util/helper';
+import DatePicker from './../DatePicker';
 
 const AddIssueModal = props => {
   const [isSaving, setIsSaving] = useState(false);
@@ -19,25 +20,28 @@ const AddIssueModal = props => {
   const title = useFormInput('');
   const description = useFormInput('');
   const assignee = useFormInput('');
-  const [dueDate, setDueDate] = useState('');
+  const dueDate = useFormInput(null, true);
   const [boardMembers, setBoardMembers] = useState([]);
   const { openSnackBar } = useSnackBar();
   const boardId = props.boardId;
-  
+
   const handleOnSubmit = event => {
     event.preventDefault();
     if (!title.value) {
       showError(true, 'please enter Title');
       return;
     }
-    addIssue({
+    const addIssueData = {
       title: title.value,
       description: description.value,
       assignee: assignee.value,
-      dueDate: dueDate
-    });
+    }
+    if (dueDate.value) {
+      addIssueData['dueDate'] = dueDate.value;
+    }
+    addIssue(addIssueData);
   };
-  
+
   function fetchBoardMembers() {
     requestToServer(
       axios(`${SERVER_URL}/board/members/${boardId}`, {
@@ -73,15 +77,6 @@ const AddIssueModal = props => {
       }
     }
   }
-  const isVailidDate = event => {
-    const date = event.target.value;
-    const isValid = new Date(date) >= new Date();
-    if (isValid) {
-      setDueDate(date);
-    } else {
-      showError(true, 'Due date should be greater than todays date');
-    }
-  };
 
   const showError = (show, message = '') => {
     setValidationError({
@@ -156,17 +151,13 @@ const AddIssueModal = props => {
             </TextField>
           </Grid>
           <Grid item xs={5}>
-            <TextField
-              id="duedate"
-              label="Due date"
-              type="datetime-local"
-              fullWidth
-              InputLabelProps={{
-                shrink: true
-              }}
-              margin="normal"
-              onChange={isVailidDate}
-            />
+            <DatePicker
+                disablePast
+                label="Due Date"
+                margin="normal"
+                clearable={true}
+                {...dueDate}
+              />
           </Grid>
           <Grid container>
             <Grid item xs={12}>

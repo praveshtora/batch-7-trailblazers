@@ -7,6 +7,7 @@ import AddIssueModal from './AddIssueModal';
 import axios from 'axios';
 import {SERVER_URL} from '../../config';
 import { useSnackBar } from '../../customHooks';
+import Modal from './../CommonComponents/Modal';
 
 const BoardDetails = props => {
   const boardId = props.match.params.id;
@@ -101,38 +102,37 @@ const BoardDetails = props => {
         </List>
       </Popover>
     </AppMenu>
-    <Dialog open={openInviteUserDailog} onClose={handleCloseInviteDailog} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Invite</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter the email address below to invite someone for collaboration
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            onChange = {setEmail}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseInviteDailog} color="primary">
+
+    <Modal title="Invite" open={openInviteUserDailog} handleClose={handleCloseInviteDailog} width="500px">
+          Please enter the email address below to invite someone for collaboration
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Email Address"
+          type="email"
+          fullWidth
+          onChange = {setEmail}
+        />
+        <div style={{ marginTop: '10px' }}>
+          <div className="float-right">
+            <Button onClick={handleSaveInvite} color="primary">
+              Invite
+             </Button>
+          </div>
+          <div className="float-right">
+          <Button onClick={handleCloseInviteDailog} >
             Cancel
           </Button>
-          <Button onClick={handleSaveInvite} color="primary">
-            Invite
-          </Button>
-        </DialogActions>
-      </Dialog>
-
+          </div>
+        </div>
+    </Modal>
     <Box m={1}>
       <KanbanView ref={kanbanReference} boardId={props.match.params.id} />
     </Box>
 
-    <AddIssueModal boardId={boardId} open={openAddIssueModal} handleClose={() => setOpenIssueModal(false)}
-      afterSave={afterIssueAdded}/>
+    {openAddIssueModal && <AddIssueModal boardId={boardId} open={openAddIssueModal} handleClose={() => setOpenIssueModal(false)}
+      afterSave={afterIssueAdded}/>}
     </Fragment>
   );
 };

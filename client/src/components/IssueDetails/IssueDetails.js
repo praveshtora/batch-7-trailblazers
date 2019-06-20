@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Cookies from 'js-cookie';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import Button from './../Button/Button';
 import CloseButton from '../CloseButton';
 import { SERVER_URL } from '../../config';
@@ -61,6 +61,7 @@ const IssueDetails = ({ issueId, onClose }) => {
   const [comments, setComments] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
+  const [createdBy, setCreatedBy] = useState('Unknown');
 
   const { openSnackBar } = useSnackBar();
   const showError = message => openSnackBar('error', message);
@@ -81,6 +82,9 @@ const IssueDetails = ({ issueId, onClose }) => {
         setTeam(data.team);
         setComments(data.comments);
         setDataLoading(false);
+        if(data.createdBy) {
+          setCreatedBy(data.createdBy.name);
+        }
       },
       showError
     );
@@ -134,8 +138,12 @@ const IssueDetails = ({ issueId, onClose }) => {
       {dataLoading && <LinearProgress />}
       <div className="container">
         <div>
-          <Box display="flex" justifyContent="space-between">
+          <Typography display='block' gutterBottom variant="overline">Created By: {createdBy}</Typography>
+        </div>
+        <div>
+          <Box display="flex"  justifyContent="space-between">
             <DatePicker
+             
               className="date-picker"
               disablePast
               label="Due Date"

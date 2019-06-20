@@ -61,6 +61,7 @@ const getBoardDetails = async (req, res) => {
 
 const addIssue = async function (req, res) {
   try {
+    const userId = req.user.id;
     const validationSchema = Joi.object().keys({
       id: Joi.number().required(),
       title: Joi.string().required(),
@@ -82,6 +83,7 @@ const addIssue = async function (req, res) {
     }
     const newIssue = {
       ...req.body,
+      createdBy: userId,
       lifeCycle: board.lifeCycles[0],
     };
 

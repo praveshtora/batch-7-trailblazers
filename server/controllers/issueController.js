@@ -15,7 +15,9 @@ const getIssueDetails = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const issue = await Issue.findOne({ id }).populate('comments');
+    const issue = await Issue.findOne({ id })
+    .populate('comments')
+    .populate('createdBy', 'name');
     if (!issue) {
       return res.send(buildResponse(false, "Issue doesn't exist"));
     }

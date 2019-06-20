@@ -15,8 +15,11 @@ export default function AddBoardForm(props) {
       return;
     }
 
-    if (lifeCycles.indexOf(lifeCycle.toLowerCase()) === -1) {
-      setLifeCycles([...lifeCycles, lifeCycle.toLowerCase()]);
+    const existLifeCycles = lifeCycles.find((value)=> {
+      return value.toLowerCase() === lifeCycle.toLowerCase();
+    })
+    if (!existLifeCycles) {
+      setLifeCycles([...lifeCycles, lifeCycle]);
       setLifeCycle("");
     } else {
       setError({ message: "already exists", show: true });
@@ -60,6 +63,7 @@ export default function AddBoardForm(props) {
               onChange={evt => {
                 setName(evt.target.value);
               }}
+              inputProps={{ maxLength: '50' }}
               required
               variant="outlined"
             />
@@ -76,6 +80,7 @@ export default function AddBoardForm(props) {
                 setError({ message: "", show: false });
                 setLifeCycle(evt.target.value);
               }}
+              inputProps={{ maxLength: '50' }}
               fullWidth
               variant="outlined"
               onKeyDown = {handleKeyPressLifeCycle}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
 import {
-  KeyboardDatePicker,
+  DatePicker as MaterialDatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
@@ -15,9 +15,9 @@ const DatePicker = props => {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <KeyboardDatePicker
+      <MaterialDatePicker
         autoOk
-        variant="inline"
+        variant="dialog"
         inputVariant="outlined"
         InputAdornmentProps={{ position: 'start' }}
         {...props}

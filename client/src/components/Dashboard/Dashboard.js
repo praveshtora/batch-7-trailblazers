@@ -125,10 +125,12 @@ export default function Dashboard(props) {
               backgroundColor={PRIMARY_MAIN}
               afterClick={() => goToBoard(board.id)}
             >
+              <label className="labelId">#{board.id}</label>
               <Typography
                 variant="h6"
                 gutterBottom
                 className="text-color-white"
+                style={{display:'inline-block'}}
               >
                 {board.name}
               </Typography>
