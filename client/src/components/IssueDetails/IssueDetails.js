@@ -48,7 +48,7 @@ const CommentsList = ({ data }) => {
   return <div className="comments-wrapper">{comments}</div>;
 };
 
-const IssueDetails = ({ issueId, onClose }) => {
+const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
   const classes = useStyles();
 
   const [id, setId] = useState(0);
@@ -57,9 +57,9 @@ const IssueDetails = ({ issueId, onClose }) => {
   const assignee = useFormInput('');
   const newComment = useFormInput('');
   const description = useFormInput('');
-  const [team, setTeam] = useState([]);
   const [comments, setComments] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [newComments, setNewComments] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [createdBy, setCreatedBy] = useState('Unknown');
 
@@ -79,8 +79,7 @@ const IssueDetails = ({ issueId, onClose }) => {
         dueDate.onChange(data.dueDate);
         setNewValue(assignee, data.assignee);
         setNewValue(description, data.description);
-        setTeam(data.team);
-        setComments(data.comments);
+        setComments(data.comments.reverse());
         setDataLoading(false);
         if(data.createdBy) {
           setCreatedBy(data.createdBy.name);
@@ -103,23 +102,34 @@ const IssueDetails = ({ issueId, onClose }) => {
     };
 
     setComments([comment, ...comments]);
+    setNewComments([comment, ...newComments]);
     setNewValue(newComment, '');
   };
 
   useEffect(getIssueDetails, [issueId]);
   const handleUpdate = () => {
     setIsSaving(true);
+
+    const fields = {
+      title: title.value,
+      assignee: assignee.value,
+      description: description.value,
+    };
+    if (dueDate.value) {
+      fields.dueDate = dueDate.value;
+    }
+
     requestToServer(
       axios.post(
-        `${SERVER_URL}/issue/update/`,
-        { id: issueId, title, dueDate, assignee, description, comments },
+        `${SERVER_URL}/issue/update`,
+        { id: issueId, ...fields, newComments },
         { withCredentials: true }
       ),
-      () => {
+      (data, message) => {
         setIsSaving(false);
-        onClose();
+        onUpdateIssue(message);
       },
-      (errMessage) => {
+      errMessage => {
         showError(errMessage);
         setIsSaving(false);
       }
@@ -151,7 +161,7 @@ const IssueDetails = ({ issueId, onClose }) => {
             />
             <OutlinedSelectInput
               label="Assignee"
-              data={team}
+              data={boardMembers}
               selected={assignee}
               className="assignee-selector"
               {...assignee}
@@ -171,7 +181,8 @@ const IssueDetails = ({ issueId, onClose }) => {
           <div>
             <Paper
               className={`${classes.commentsContainer} comments-container`}
-            >
+              >
+              <h3>Comments</h3>
               <form onSubmit={handleOnNewComment}>
                 <TextField
                   color="primary"

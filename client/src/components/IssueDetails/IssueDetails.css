@@ -48,7 +48,7 @@
   padding: 4px;
   font-size: 1em;
 }
-.IssueDetails .date-picker .MuiOutlinedInput-input{
+.IssueDetails .date-picker .MuiOutlinedInput-input {
   padding: 12px;
   max-width: 128px;
 }
@@ -64,6 +64,12 @@
   justify-content: center;
 }
 
+.IssueDetails .comments-container h3 {
+  margin: 0;
+  color: #444;
+  font-weight: 300;
+}
+
 .IssueDetails .comments-container .new-comment-box fieldset {
   background-color: #ffffff;
 }
@@ -77,7 +83,7 @@
   height: 100%;
 } */
 
-.IssueDetails .comments-container .comment-wrapper  {
+.IssueDetails .comments-container .comment-wrapper {
   padding: 8px;
   margin: 8px;
 }

@@ -1,5 +1,7 @@
 import Joi from '@hapi/joi';
 
+const JoiObject = schema => Joi.object().keys(schema);
+
 const changeLifeCycle = {
   id: Joi.number().required(),
   lifeCycle: Joi.string().required(),
@@ -56,16 +58,20 @@ const inviteEmail = {
     .required(),
 };
 
+const comment = {
+  description: Joi.string().required(),
+  createdBy: Joi.string().required(),
+  createdAt: Joi.date(),
+};
+
 const updateIssueDetails = {
   id: Joi.number().required(),
   title: Joi.string(),
   dueDate: Joi.date(),
-  assignee: Joi.string(),
+  assignee: Joi.string().empty(''),
   description: Joi.string(),
-  newComments: Joi.array().items(Joi.string().required()),
+  newComments: Joi.array().items(JoiObject(comment)),
 };
-
-const JoiObject = schema => Joi.object().keys(schema);
 
 export const SERVER_ERROR_MESSAGE = 'Some error occurred on server';
 export const LOGIN_FIELDS_SCHEMA = JoiObject(loginFields);

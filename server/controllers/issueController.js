@@ -78,10 +78,7 @@ const update = async (req, res) => {
     if (newComments) {
       const allNewComments = await Promise.all(
         newComments.map((newComment) => {
-          const comment = new Comment({
-            description: newComment,
-            createdBy: req.user.name,
-          });
+          const comment = new Comment({ ...newComment });
           return comment.save();
         }),
       );

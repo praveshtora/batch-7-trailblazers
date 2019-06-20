@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef
+} from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../../config';
 import LifeCycleColumn from '../LifeCycleColumn';
@@ -12,25 +17,46 @@ import './KanbanView.css';
 const KanbanView = forwardRef(({ boardId }, ref) => {
   const [lifeCycles, setLifeCycles] = useState([]);
   const { openSnackBar } = useSnackBar();
-  const showError = useCallback(message => openSnackBar('error', message), [
-    openSnackBar
-  ]);
+  const [boardMembers, setBoardMembers] = useState([]);
+
+  const showError = message => openSnackBar('error', message);
+  const showSuccess = message => openSnackBar('success', message);
 
   const [issueId, setIssueId] = useState();
   const [openIssueDetails, setOpenIssueDetails] = useState(false);
   useImperativeHandle(ref, () => ({
     refreshBoard() {
-      getBoards();
+      getBoardsData();
     }
   }));
 
+  const fetchBoardMembers = () => {
+    requestToServer(
+      axios(`${SERVER_URL}/board/members/${boardId}`, {
+        withCredentials: true
+      }),
+      data => {
+        const users = data.map(d => d.user && d.user.name);
+        setBoardMembers(users);
+      },
+      message => openSnackBar('error', message)
+    );
+  };
+
   const openModalIssueDetails = id => {
     setIssueId(id);
+    fetchBoardMembers();
     setOpenIssueDetails(true);
   };
-  const onIssueModalClose = () => setOpenIssueDetails(false);
+  const onIssueModalClose = message => setOpenIssueDetails(false);
 
-  const getBoards = () => {
+  const onUpdateIssue = message => {
+    showSuccess(message);
+    onIssueModalClose();
+    getBoardsData();
+  }
+
+  const getBoardsData = () => {
     requestToServer(
       axios.get(`${SERVER_URL}/board/${boardId}`),
       data => {
@@ -40,7 +66,7 @@ const KanbanView = forwardRef(({ boardId }, ref) => {
     );
   };
 
-  useEffect(getBoards, []);
+  useEffect(getBoardsData, []);
 
   const changeLifeCycle = async (id, finishLifeCycleName) => {
     requestToServer(
@@ -51,9 +77,9 @@ const KanbanView = forwardRef(({ boardId }, ref) => {
           id,
           lifeCycle: finishLifeCycleName
         },
-        withCredential: true,
+        withCredential: true
       }),
-      getBoards,
+      getBoardsData,
       showError
     );
   };
@@ -116,7 +142,12 @@ const KanbanView = forwardRef(({ boardId }, ref) => {
       >
         <div className="issueDetails-container">
           {openIssueDetails && (
-            <IssueDetails issueId={issueId} onClose={onIssueModalClose} />
+            <IssueDetails
+              issueId={issueId}
+              boardMembers={boardMembers}
+              onClose={onIssueModalClose}
+              onUpdateIssue={onUpdateIssue}
+            />
           )}
         </div>
       </Modal>
