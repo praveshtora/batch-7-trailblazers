@@ -1,4 +1,6 @@
 import Joi from '@hapi/joi';
+import fs from 'fs';
+import handelbars from 'handlebars';
 import Board from '../models/boardModel';
 import { buildResponse, joiValidate } from '../utils/helpers';
 import Issue from '../models/issueModel';
@@ -7,6 +9,21 @@ import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
 
 import sendEmail from '../utils/emailService';
+
+const readHTMLFile = path => fs.readFileSync(path);
+
+const sendInviteEmail = async (name, email, boardName, sender) => {
+  const html = readHTMLFile(`${__dirname}/invitationEmail.html`);
+  const htmlTemplate = handelbars.compile(html.toString());
+  const replacements = {
+    Product: 'Groot',
+    name,
+    board: boardName,
+    sender,
+  };
+  const htmlTosend = htmlTemplate(replacements);
+  await sendEmail(email, 'Groot', `Invitation to Collaborate on ${boardName}`, '', htmlTosend);
+};
 
 const validateBoardId = (idFromReq) => {
   const id = parseInt(idFromReq, 10);
@@ -132,14 +149,9 @@ const inviteUser = async (req, res) => {
         { $push: { members: { user: invitedUserinDB.id, role: ROLES_ENUM.USER } } },
       );
       const inviteUserId = invitedUserinDB._id;
-      await Dashboard.findOneAndUpdate({userId: inviteUserId}, {$push: { boards: board._id }});
-
+      await Dashboard.findOneAndUpdate({ userId: inviteUserId }, { $push: { boards: board._id } });
       const boardUpdated = await boardUpdatedPromise;
-      const subject = `Invitation to collaborate on Board ${boardUpdated.name}`;
-      const body = `Hi ${invitedUserinDB.name},
-      You are invited by ${userName} to collaborate on ${boardUpdated.name}
-    Thanks`;
-      await sendEmail(email, 'Pravesh', subject, body);
+      await sendInviteEmail(invitedUserinDB.name, email, boardUpdated.name, userName);
       return res.status(200).send(buildResponse(true, 'Invitation sent'));
     }
     return res.status(400).send(buildResponse(false, 'User is not registered with us.'));
