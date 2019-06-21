@@ -74,7 +74,8 @@
         const response = await axios({
           url: `${SERVER_URL}/board/member/${boardId}`,
           method: "patch",
-          data
+          data,
+          withCredentials: true
         });
         const { isSuccess, message } = response.data;
         openSnackBar('success', message);

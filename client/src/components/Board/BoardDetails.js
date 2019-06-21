@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useCallback, useRef} from 'react';
+import React, {Fragment, useState, useCallback, useRef, useEffect} from 'react';
 import { Icon, Popover, List, ListItem, ListItemText, Box,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,TextField } from '@material-ui/core';
 import AppMenu from '../AppMenu/AppMenu';
 import KanbanView from '../KanbanView';
@@ -24,7 +24,9 @@ const BoardDetails = props => {
   const [ boardName, setBoardName ] = useState('Loading...');
   const { USER } = constants.ROLES;
 
-
+  useEffect(()=> {
+    fetchRole();
+  }, [props])
   const handleSettingClick = function(event) {
     setsettingAnchorEl(event.currentTarget);
   }
