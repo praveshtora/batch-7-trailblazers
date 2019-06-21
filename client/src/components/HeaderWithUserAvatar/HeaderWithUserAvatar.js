@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import Header from '../Header';
 import {
   Icon,
@@ -25,26 +25,30 @@ const HeaderWithUserAvatar = ({ name = '', children, hideProfile, ...rest }) => 
 
   const handleProfileClick = function(event) {
     setProfileAnchorEl(event.currentTarget);
-    if(Cookies.get('issue_tracker_user')) {
-      const user = JSON.parse(Cookies.get('issue_tracker_user'));
-      setUserName(user.name);
-    } 
+   
   }
+  useEffect( () => {
+    console.log("NGFGN");
+    if(Cookies.get('issue_tracker_user')) {
+    const user = JSON.parse(Cookies.get('issue_tracker_user'));
+    setUserName(user.name);
+    }
+  });
 
   return (
     <Header
       name={name}
       {...rest}
     >
-      { hideProfile || <Box display="flex" alignItems="center">
+{ hideProfile || <Box display="flex" alignItems="center" onClick={handleProfileClick}>
         {children}
-          <Icon
-            style={{ fontSize: 30, float: 'right', cursor: 'pointer' }}
-            onClick={handleProfileClick}
-          >
-            account_circle
-          </Icon>
-         </Box> }
+        <label style={{ cursor: 'pointer', paddingRight: '4px'}} > {userName} </label>
+        <Icon
+          style={{ fontSize: 30, float: 'right',  cursor: 'pointer' }}
+        >
+          account_circle
+        </Icon> 
+      </Box>}
       <Popover
         open={openProfile}
         onClose={() => setProfileAnchorEl(null)}
@@ -55,9 +59,6 @@ const HeaderWithUserAvatar = ({ name = '', children, hideProfile, ...rest }) => 
         }}
       >
         <List component="nav">
-          <ListItem>
-            <ListItemText primary={userName}/>
-          </ListItem>
           <ListItem onClick={logOut} button>
             <ListItemText primary="Logout" />
           </ListItem>

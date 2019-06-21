@@ -153,7 +153,7 @@
         <CircularProgress className="loader-center" />
       </div>
     ) : (
-      <div style={{textAlign:"center"}}>
+      <div style={{textAlign:"center",overflowX:'scroll'}}>
         <Paper className="member-table">
          
           <Table>
