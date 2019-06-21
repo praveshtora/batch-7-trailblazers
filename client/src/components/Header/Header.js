@@ -23,7 +23,7 @@ function Header({ name = '', children, ...rest }) {
         <Typography variant="h6" color="inherit">
           {name}
         </Typography>
-        <img width="150px" alt="Groot" src={logo} />
+        <a href="/dashboard"><img width="150px" alt="Groot" src={logo} /></a>
         <div className={classes.rightAligned}>{children}</div>
       </Toolbar>
     </AppBar>

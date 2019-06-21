@@ -38,7 +38,10 @@ const BoardDetails = props => {
   const goToMembers = () => props.history.push(`setting/${boardId}`);
   const afterIssueAdded = () => kanbanReference.current.refreshBoard();
   const handleClickOpenInviteDialog = () => setOpenInviteUserDialog(true);
-  const handleCloseInviteDialog = () => setOpenInviteUserDialog(false);
+  const handleCloseInviteDialog = () => { 
+    inviteeEmail.onChange({target: {value: ''} });
+    setOpenInviteUserDialog(false); 
+  };
   
   useEffect(() => {
     (async () => {
