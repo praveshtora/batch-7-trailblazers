@@ -29,6 +29,7 @@ const BoardDetails = props => {
   const { openSnackBar } = useSnackBar();
   const [userRole, setUserRole] = useState('USER');
   const [boardName, setBoardName] = useState('Loading...');
+  const [sendInvitation, setSendInvitation] = useState(false);
   const { USER } = constants.ROLES;
 
   const showError = message => openSnackBar('error', message);
@@ -38,7 +39,7 @@ const BoardDetails = props => {
   const afterIssueAdded = () => kanbanReference.current.refreshBoard();
   const handleClickOpenInviteDialog = () => setOpenInviteUserDialog(true);
   const handleCloseInviteDialog = () => setOpenInviteUserDialog(false);
-
+  
   useEffect(() => {
     (async () => {
       try {
@@ -61,6 +62,7 @@ const BoardDetails = props => {
   }, [boardId, openSnackBar]);
 
   const handleSaveInvite = async () => {
+    setSendInvitation(true);
     try {
       const response = await axios({
         method: 'post',
@@ -80,6 +82,7 @@ const BoardDetails = props => {
         showError('Something went wrong');
       }
     }
+    setSendInvitation(false);
   };
 
   const kanbanReference = useRef();
@@ -168,7 +171,7 @@ const BoardDetails = props => {
         />
         <div style={{ marginTop: '10px' }}>
           <div className="float-right">
-            <Button onClick={handleSaveInvite} color="secondary">
+            <Button onClick={handleSaveInvite} color="secondary" loading={sendInvitation}>
               Invite
             </Button>
           </div>

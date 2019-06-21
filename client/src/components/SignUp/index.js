@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -51,6 +52,7 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState('');
   const [signUpSuccess, setSignUpSucess] = useState(false);
   const { openSnackBar } = useSnackBar();
+  const [isSaving ,setIsSaving] = useState (false);
 
   const handleEmailChange = evt => {
     setUser({...user,email :evt.target.value});
@@ -66,25 +68,26 @@ export default function SignUp() {
 
   const postData = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
-    const response = await axios({
-      method : 'post',
-      url : `${SERVER_URL}/signup`,
-      data : {...user},
-      headers: { "Content-Type": "application/json" },
-    });
-    if(response && response.data && response.data.isSuccess) {
-      setErrorMessage('');
-      setSignUpSucess(true);
-      openSnackBar('success', response.data.message);
-    }
+      const response = await axios({
+        method : 'post',
+        url : `${SERVER_URL}/signup`,
+        data : {...user},
+        headers: { "Content-Type": "application/json" },
+      });
+      if(response && response.data && response.data.isSuccess) {
+        setErrorMessage('');
+        setSignUpSucess(true);
+        openSnackBar('success', response.data.message);
+      }
 
-  } catch (err) {
-    if(err.response) {
-      openSnackBar('error',err.response.data.message);
+    } catch (err) {
+      if(err.response) {
+        openSnackBar('error',err.response.data.message);
+      }
     }
-  }
-
+    setIsSaving(false);
   };
 
   return (
@@ -141,7 +144,7 @@ export default function SignUp() {
               {errorMessage ? <p className= {classes.errorMessage}>{errorMessage}</p> : ''}
             </Grid>
           </Grid>
-          <Button
+          {!isSaving && <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -149,7 +152,19 @@ export default function SignUp() {
             className={classes.submit}
           >
             Sign Up
-          </Button>
+          </Button> }
+        
+          {isSaving && <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            disabled
+          >
+            <CircularProgress size={24} />
+          </Button> }
+        
           {signUpSuccess && <Redirect to="/login"></Redirect>}
           <Grid container justify="flex-end">
             <Grid item>

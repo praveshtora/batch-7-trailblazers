@@ -12,7 +12,7 @@ import { Auth } from '../PrivateRoute';
 import './HeaderWithUserAvatar.css';
 import Cookies from 'js-cookie';
 
-const HeaderWithUserAvatar = ({ name = '', children, ...rest }) => {
+const HeaderWithUserAvatar = ({ name = '', children, hideProfile, ...rest }) => {
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const openProfile = Boolean(profileAnchorEl);
   const [userName, setUserName] = useState('');
@@ -36,15 +36,15 @@ const HeaderWithUserAvatar = ({ name = '', children, ...rest }) => {
       name={name}
       {...rest}
     >
-      <Box display="flex" alignItems="center">
+      { hideProfile || <Box display="flex" alignItems="center">
         {children}
-        <Icon
-          style={{ fontSize: 30, float: 'right', cursor: 'pointer' }}
-          onClick={handleProfileClick}
-        >
-          account_circle
-        </Icon>
-      </Box>
+          <Icon
+            style={{ fontSize: 30, float: 'right', cursor: 'pointer' }}
+            onClick={handleProfileClick}
+          >
+            account_circle
+          </Icon>
+         </Box> }
       <Popover
         open={openProfile}
         onClose={() => setProfileAnchorEl(null)}

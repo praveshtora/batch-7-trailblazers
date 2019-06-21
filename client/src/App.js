@@ -13,12 +13,12 @@ import theme from './theme';
 import HeaderWithUserAvatar from './components/HeaderWithUserAvatar';
 
 function App(props) {
-  const isLoginView = props.location.pathname === '/login';
+  const notToShowProfile = props.location.pathname === '/login' || props.location.pathname === '/signup';
   return (
     <ThemeProvider theme={theme}>
       <SnackBarProvider>
         <div className="App">
-          {isLoginView || <HeaderWithUserAvatar />}
+          <HeaderWithUserAvatar hideProfile={notToShowProfile}/>
           <Switch>
             <PrivateRoute exact path="/login" component={Login} />
             <PrivateRoute exact path="/signup" component={Signup} />

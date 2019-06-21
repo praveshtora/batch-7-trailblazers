@@ -1,7 +1,8 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Link from '@material-ui/core/Link';
 import { SERVER_URL } from '../../config';
 import Avatar from '@material-ui/core/Avatar';
@@ -53,11 +54,14 @@ const Login = props => {
 
   const email = useFormInput('');
   const password = useFormInput('');
-
-  const showError = message => openSnackBar('error', message);
+  const [isLogin, setIsLogin] = useState(false);
+  const showError = message => { 
+    setIsLogin(false);
+    openSnackBar('error', message);
+  }
   const handleFormSubmit = e => {
     e.preventDefault();
-
+    setIsLogin(true);
     requestToServer(
       axios({
         method: 'post',
@@ -69,6 +73,7 @@ const Login = props => {
       data => {
         Cookies.set('issue_tracker_user', data);
         props.history.push('/dashboard');
+        setIsLogin(false);
       },
       showError
     );
@@ -101,7 +106,7 @@ const Login = props => {
             autoComplete="current-password"
             {...password}
           />
-          <Button
+          {!isLogin && <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -109,7 +114,18 @@ const Login = props => {
             className={classes.submit}
           >
             Log In
-          </Button>
+          </Button> }
+
+          {isLogin && <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            disabled
+          >
+            <CircularProgress size={24} />
+          </Button> }
 
           <Box textAlign="left">
             <span>Or</span>
