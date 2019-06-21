@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "yarn babel . -d dist --ignore 'node_modules/**/*.js' --ignore 'dist/**' --source-maps",
+    "build": "yarn babel . -d dist  --copy-files --ignore 'node_modules/**/*.js' --ignore 'dist/**' --source-maps",
     "serve": "yarn && yarn build && node dist/app.js",
     "start": "nodemon --exec babel-node app.js",
     "test": "jest --runInBand"
