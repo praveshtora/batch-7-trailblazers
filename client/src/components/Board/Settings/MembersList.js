@@ -108,7 +108,8 @@
         const result = await axios({
           url: `${SERVER_URL}/board/member/${boardId}`,
           method: 'delete',
-          data: {member: memberToBeDelete._id}
+          data: {member: memberToBeDelete._id},
+          withCredentials: true
         });  
         fetchBoardMembers();
       }
