@@ -81,9 +81,7 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
         setNewValue(description, data.description);
         setComments(data.comments.reverse());
         setDataLoading(false);
-        if(data.createdBy) {
-          setCreatedBy(data.createdBy.name);
-        }
+        setCreatedBy( data.createdBy && data.createdBy.name);
       },
       showError
     );

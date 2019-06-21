@@ -1,5 +1,6 @@
 .KanbanView {
   display: flex;
+  height: 100%;
   flex-direction: row;
-  min-height: calc(100vh - 200px);
+  overflow-x: scroll;
 }

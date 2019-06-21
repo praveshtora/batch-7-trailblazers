@@ -76,6 +76,7 @@ export default function SignUp() {
     if(response && response.data && response.data.isSuccess) {
       setErrorMessage('');
       setSignUpSucess(true);
+      openSnackBar('success', response.data.message);
     }
 
   } catch (err) {

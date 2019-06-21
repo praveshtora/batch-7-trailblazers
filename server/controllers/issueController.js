@@ -16,8 +16,8 @@ const getIssueDetails = async (req, res) => {
     const { id } = req.params;
 
     const issue = await Issue.findOne({ id })
-    .populate('comments')
-    .populate('createdBy', 'name');
+      .populate('comments')
+      .populate('createdBy', 'name');
     if (!issue) {
       return res.send(buildResponse(false, "Issue doesn't exist"));
     }
@@ -48,11 +48,10 @@ const changeLifeCycle = async (req, res) => {
   }
 };
 
-const filterOutUndefined = obj => Object.entries(obj)
-  .reduce((acc, [key, value]) => {
-    if (value !== undefined) acc[key] = value;
-    return acc;
-  }, {});
+const filterOutUndefined = obj => Object.entries(obj).reduce((acc, [key, value]) => {
+  if (value !== undefined) acc[key] = value;
+  return acc;
+}, {});
 
 const update = async (req, res) => {
   console.log(req.body);
@@ -65,7 +64,10 @@ const update = async (req, res) => {
     } = req.body;
 
     const fields = {
-      title, dueDate, assignee, description,
+      title,
+      dueDate,
+      assignee,
+      description,
     };
 
     const fieldsToUpdate = filterOutUndefined(fields);

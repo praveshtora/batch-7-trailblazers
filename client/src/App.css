@@ -1,22 +1,8 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background: #F7F7F7;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .loader-center {
@@ -53,7 +39,7 @@
   float: right;
 }
 
-.eror-msg {
+.error-msg {
   color: red;
   font-size: 12px;
 }
@@ -73,9 +59,6 @@
   color: white;
 }
 
-.app-body {
-  margin: 0px 25px 0px 25px;
-}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -83,4 +66,36 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(0,0,0,0);
+  border-radius: 100px;
+}
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+
+::-webkit-scrollbar-thumb:vertical,
+::-webkit-scrollbar-thumb:horizontal {
+  background: rgba(0,0,0,0.3);
+  border-radius: 100px;
+  background-clip: padding-box;
+  border: 4px solid rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  min-height: 10px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  min-width: 16px;
+}
+
+::-webkit-scrollbar-thumb:vertical:active,
+::-webkit-scrollbar-thumb:horizontal:active {
+  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+  border-radius: 100px;
 }

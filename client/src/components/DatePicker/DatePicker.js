@@ -17,9 +17,7 @@ const DatePicker = props => {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <MaterialDatePicker
         autoOk
-        variant="dialog"
         inputVariant="outlined"
-        InputAdornmentProps={{ position: 'start' }}
         {...props}
       />
     </MuiPickersUtilsProvider>

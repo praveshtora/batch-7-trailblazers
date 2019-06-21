@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function CustomModal(props) {
   const classes = useStyles();
-  
+
   return (
     <Fragment>
       <Modal
@@ -33,22 +33,22 @@ export default function CustomModal(props) {
           style={{ width: props.width }}
           className={classes.paper + ' modalStyle'}
         >
-          <div>
-            <Box
-              bgcolor="primary.main"
-              color="primary.contrastText"
-              p={2}
-              m={0}
-            >
-              <Typography variant="h6" style={{display:'inline-block'}}>{props.title}</Typography>
-              <div className="modalCloseCross">
-                <IconButton  key="close" aria-label="Close" color="inherit" onClick={props.handleClose}>
-                  <CloseIcon />
-                </IconButton>
-              </div>
-            </Box>
-          </div>
-          <div style={{padding: '32px' }}>{props.children}</div>
+          <Box bgcolor="primary.main" color="primary.contrastText" p={2} m={0}>
+            <Typography variant="h6" style={{ display: 'inline-block' }}>
+              {props.title}
+            </Typography>
+            <div className="modalCloseCross">
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={props.handleClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Box>
+          <div style={{ padding: '32px' }}>{props.children}</div>
         </div>
       </Modal>
     </Fragment>

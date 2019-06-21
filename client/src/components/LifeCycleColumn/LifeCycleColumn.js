@@ -7,12 +7,15 @@ import './LifeCycleColumn.css';
 
 const useStyles = makeStyles(theme => ({
   header: {
-    backgroundColor: theme.palette.primary.main,
-    padding: '8px',
-    color: '#ffffff'
+    paddingBottom: 8,
+    // color: '#333333'
   },
   IssuesContainer: {
-    height: '100%'
+    paddingBottom: 120,
+    border: '1px solid #dddddd',
+    backgroundColor: '#eeeeee',
+    borderRadius: 4
+    // overflowY: 'scroll',
   }
 }));
 

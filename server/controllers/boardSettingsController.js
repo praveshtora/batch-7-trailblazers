@@ -7,9 +7,8 @@ import {
   GET_MEMBERS,
   UPDATE_MEMBER_ROLE,
   DELETE_MEMBER,
+  SERVER_NOT_AUTHENTICATE,
 } from '../utils/constants';
-import mongoose from 'mongoose';
-import { SERVER_NOT_AUTHENTICATE } from './../utils/constants';
 
 const getMembers = async (req, res) => {
   try {
@@ -19,7 +18,7 @@ const getMembers = async (req, res) => {
 
     const boardId = req.params.id;
     const isUserPresent = await validateUserInBoard(userId, boardId);
-    if(!isUserPresent) {
+    if (!isUserPresent) {
       return res.status(401).send(buildResponse(false, SERVER_NOT_AUTHENTICATE));
     }
     const board = await Board.findOne({ id: boardId }, { members: 1 }).populate(
@@ -39,10 +38,7 @@ const getMembers = async (req, res) => {
 
 const updateMemberRole = async (req, res) => {
   try {
-    const [isValid, response] = joiValidate(
-      { ...req.body, id: req.params.id },
-      UPDATE_MEMBER_ROLE,
-    );
+    const [isValid, response] = joiValidate({ ...req.body, id: req.params.id }, UPDATE_MEMBER_ROLE);
     if (!isValid) return res.status(400).send(response);
 
     const boardId = req.params.id;
@@ -83,11 +79,11 @@ const deleteMember = async (req, res) => {
       { $pull: { members: { user: member } } },
     );
 
-    // set all issues assginee related with member should be not assigned
+    // set all issues assignee related with member should be not assigned
     if (board.issues.length > 0) {
       await Issue.updateMany(
-        { _id: { $in: board.issues }, asignee: member },
-        { $set: { asignee: '' } }
+        { _id: { $in: board.issues }, assignee: member },
+        { $set: { assignee: '' } },
       );
     }
 
@@ -103,14 +99,12 @@ const getRoleOfMember = async (req, res) => {
     const boardId = req.params.id;
     const userId = req.user.id;
     const isUserPresent = await validateUserInBoard(userId, boardId);
-    if(!isUserPresent) {
+    if (!isUserPresent) {
       return res.status(401).send(buildResponse(false, SERVER_NOT_AUTHENTICATE));
     }
     const board = await Board.findOne({ id: boardId }, { members: 1 });
 
-    const member = board.members.filter(mem => {
-      return mem.user.toString() === userId;
-    });
+    const member = board.members.filter(mem => mem.user.toString() === userId);
 
     if (!member) {
       return res.status(400).send(buildResponse(false, 'Member does not present in board'));
@@ -120,11 +114,11 @@ const getRoleOfMember = async (req, res) => {
     console.log(exception);
     return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
   }
-} 
+};
 
 export default {
   getMembers,
   updateMemberRole,
   deleteMember,
-  getRoleOfMember
+  getRoleOfMember,
 };

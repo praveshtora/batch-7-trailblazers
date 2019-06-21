@@ -1,18 +1,19 @@
+import axios from 'axios';
 import React from 'react';
+import Cookies from 'js-cookie';
+import Box from '@material-ui/core/Box';
+import Link from '@material-ui/core/Link';
+import { SERVER_URL } from '../../config';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { requestToServer } from '../../util/helper';
+import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import axios from 'axios';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { useFormInput, useSnackBar } from '../../customHooks';
-import { SERVER_URL } from '../../config';
-import Cookies from 'js-cookie';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -48,38 +49,29 @@ const FullLengthOutlinedTextField = props => (
 
 const Login = props => {
   const classes = useStyles();
-  const { openSnackBar, closeSnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const email = useFormInput('');
   const password = useFormInput('');
 
   const showError = message => openSnackBar('error', message);
-  const handleFormSubmit = async e => {
+  const handleFormSubmit = e => {
     e.preventDefault();
 
-    try {
-      const response = await axios({
+    requestToServer(
+      axios({
         method: 'post',
         url: `${SERVER_URL}/login`,
         data: { email: email.value, password: password.value },
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
-      });
-
-      if (!response || !response.data) {
-        throw new Error('No response from server');
-      }
-      if (!response.data.isSuccess) throw new Error(response.data.message);
-      Cookies.set('issue_tracker_user', response.data.data);
-      props.history.push('/dashboard');
-    } catch (err) {
-      console.log(err);
-      if(!err.response) showError(err.message);
-      else {
-        const { message } = err.response.data;
-        showError(message);
-      }
-    }
+      }),
+      data => {
+        Cookies.set('issue_tracker_user', data);
+        props.history.push('/dashboard');
+      },
+      showError
+    );
   };
 
   return (
@@ -114,7 +106,6 @@ const Login = props => {
             fullWidth
             variant="contained"
             color="primary"
-            onClick={handleFormSubmit}
             className={classes.submit}
           >
             Log In
@@ -122,7 +113,7 @@ const Login = props => {
 
           <Box textAlign="left">
             <span>Or</span>
-            <Link href="/signup" variant="body2" className={classes.signUp}>
+            <Link href="/signup" className={classes.signUp}>
               {'Sign Up'}
             </Link>
           </Box>

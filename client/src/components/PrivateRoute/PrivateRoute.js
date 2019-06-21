@@ -10,6 +10,7 @@ export const Auth = {
 
   logout() {
     Cookies.remove('issue_tracker_user');
+    window.location.replace('/');
   }
 };
 
@@ -19,17 +20,18 @@ function PrivateRoute({ component: Component, ...rest }) {
       {...rest}
       render={props => {
         const path = props.location.pathname;
-        if ((path === '/login' || path === '/signup')) {
-            
-          if(Auth.isAuthenticated()) {return <Redirect
-            to={{
-              pathname: '/dashboard',
-              state: { from: props.location }
-            }}
-          />
+        if (path === '/login' || path === '/signup') {
+          if (Auth.isAuthenticated()) {
+            return (
+              <Redirect
+                to={{
+                  pathname: '/dashboard',
+                  state: { from: props.location }
+                }}
+              />
+            );
           }
           return <Component {...props} />;
-          
         }
 
         return Auth.isAuthenticated() ? (
@@ -41,27 +43,24 @@ function PrivateRoute({ component: Component, ...rest }) {
               state: { from: props.location }
             }}
           />
-        )
-        }
-      }
+        );
+      }}
     />
   );
 }
 
 // Intercept each axios request
-axios.interceptors.response.use(res => res, function (error) {
-  if(!error.response){
-    error.response = { data: { isSuccess: false, message: 'Network Error!'} };
-  } 
-  else if(error.response.status === 401) {
+axios.interceptors.response.use(res => res, function(error) {
+  if (!error.response) {
+    error.response = { data: { isSuccess: false, message: 'Network Error!' } };
+  } else if (error.response.status === 401) {
     setTimeout(() => {
-      window.location.href = '/dashboard'; 
+      window.location.href = '/dashboard';
     }, 1000);
-    
-  } else if(error.response.status === 403) {
+  } else if (error.response.status === 403) {
     Auth.logout();
     alert('Session Expired, Redirecting to login...');
-    window.location.href = '/login'; 
+    window.location.href = '/login';
   }
   return Promise.reject(error);
 });

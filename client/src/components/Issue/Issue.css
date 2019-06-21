@@ -1,5 +1,14 @@
 .issue-card {
   margin: 8px;
+  position: relative;
+}
+
+.issue-card .issue-title {
+  word-break: break-all;
+}
+
+.issue-card .actions {
+  margin-top: 8px;
 }
 
 .issue-content {

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Modal from './../CommonComponents/Modal';
-import { TextField, Grid, MenuItem } from '@material-ui/core';
-import Button from './../Button/Button';
+import Button from '../Button/Button';
 import './board.css';
-import './../../App.css';
-import { useFormInput } from './../../customHooks';
+import '../../App.css';
 import axios from 'axios';
-import { useSnackBar } from './../../customHooks';
-import { SERVER_URL } from './../../config';
+import DatePicker from '../DatePicker';
+import { SERVER_URL } from '../../config';
+import Modal from '../CommonComponents/Modal';
 import { requestToServer } from '../../util/helper';
-import DatePicker from './../DatePicker';
+import { TextField, Grid, MenuItem } from '@material-ui/core';
+import { useFormInput, useSnackBar } from '../../customHooks';
 
 const AddIssueModal = props => {
   const [isSaving, setIsSaving] = useState(false);
@@ -23,7 +22,7 @@ const AddIssueModal = props => {
   const dueDate = useFormInput(null, true);
   const [boardMembers, setBoardMembers] = useState([]);
   const { openSnackBar } = useSnackBar();
-  const boardId = props.boardId;
+  const { boardId } = props;
 
   const handleOnSubmit = event => {
     event.preventDefault();
@@ -34,10 +33,10 @@ const AddIssueModal = props => {
     const addIssueData = {
       title: title.value,
       description: description.value,
-      assignee: assignee.value,
-    }
+      assignee: assignee.value
+    };
     if (dueDate.value) {
-      addIssueData['dueDate'] = dueDate.value;
+      addIssueData.dueDate = dueDate.value;
     }
     addIssue(addIssueData);
   };
@@ -45,38 +44,38 @@ const AddIssueModal = props => {
   function fetchBoardMembers() {
     requestToServer(
       axios(`${SERVER_URL}/board/members/${boardId}`, {
-        withCredentials: true,
+        withCredentials: true
       }),
       setBoardMembers,
-      (message) => openSnackBar('error', message)
-    )
+      message => openSnackBar('error', message)
+    );
   }
 
   useEffect(fetchBoardMembers, []);
 
-  const addIssue = async (data) => {
+  const addIssue = async data => {
     try {
       setIsSaving(true);
       const response = await axios({
         url: `${SERVER_URL}/board/issue/add/${boardId}`,
-        method: "post",
+        method: 'post',
         withCredentials: true,
         data
       });
-      const {isSuccess, message} = response.data;
+      const { isSuccess, message } = response.data;
       const messageType = isSuccess ? 'success' : 'error';
       openSnackBar(messageType, message);
       setIsSaving(false);
       props.afterSave();
       props.handleClose();
-    } catch(error) {
+    } catch (error) {
       setIsSaving(false);
-      if(error.response && error.response.data) {
+      if (error.response && error.response.data) {
         const message = error.response.data.message;
         openSnackBar('error', message);
       }
     }
-  }
+  };
 
   const showError = (show, message = '') => {
     setValidationError({
@@ -141,38 +140,38 @@ const AddIssueModal = props => {
               {...assignee}
               variant="outlined"
             >
-              {
-                boardMembers.map( (member, index) => {
-                  return <MenuItem key={index} value={member.user.name}>
-                          {member.user.name}
-                        </MenuItem>
-                })
-              }
+              {boardMembers.map(member => (
+                <MenuItem key={member.user._id} value={member.user.name}>
+                  {member.user.name}
+                </MenuItem>
+              ))}
             </TextField>
           </Grid>
           <Grid item xs={5}>
             <DatePicker
-                disablePast
-                label="Due Date"
-                margin="normal"
-                clearable={true}
-                {...dueDate}
-              />
+              disablePast
+              label="Due Date"
+              margin="normal"
+              clearable={true}
+              {...dueDate}
+            />
           </Grid>
           <Grid container>
             <Grid item xs={12}>
               {validationError.show && (
-                <label className="eror-msg">{validationError.message}</label>
+                <label className="error-msg">{validationError.message}</label>
               )}
             </Grid>
           </Grid>
         </Grid>
         <div style={{ marginTop: '10px' }}>
           <div className="float-right">
-            <Button loading={isSaving} type="submit">Save</Button>
+            <Button loading={isSaving} color="secondary" type="submit">
+              Save
+            </Button>
           </div>
           <div className="float-right">
-            <Button onClick={props.handleClose}>Close</Button>
+            <Button color="secondary" onClick={props.handleClose}>Close</Button>
           </div>
         </div>
       </form>

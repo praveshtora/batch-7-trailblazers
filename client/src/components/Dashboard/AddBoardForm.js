@@ -1,30 +1,30 @@
-import React, { Fragment, useState } from "react";
-import "./../../App.css";
-import { TextField, Chip, Avatar, Grid } from "@material-ui/core";
-import Button from "./../Button/Button";
-import Icon from "@material-ui/core/Icon";
+import React, { Fragment, useState } from 'react';
+import './../../App.css';
+import { TextField, Chip, Avatar, Grid } from '@material-ui/core';
+import Button from './../Button/Button';
+import Icon from '@material-ui/core/Icon';
 
 export default function AddBoardForm(props) {
-  const [name, setName] = useState("");
-  const [lifeCycle, setLifeCycle] = useState("");
+  const [name, setName] = useState('');
+  const [lifeCycle, setLifeCycle] = useState('');
   const [lifeCycles, setLifeCycles] = useState([]);
-  const [error, setError] = useState({ message: "", show: false });
+  const [error, setError] = useState({ message: '', show: false });
 
   const addLifeCycle = function() {
     if (!lifeCycle) {
       return;
     }
 
-    const existLifeCycles = lifeCycles.find((value)=> {
+    const existLifeCycles = lifeCycles.find(value => {
       return value.toLowerCase() === lifeCycle.toLowerCase();
-    })
+    });
     if (!existLifeCycles) {
       setLifeCycles([...lifeCycles, lifeCycle]);
-      setLifeCycle("");
+      setLifeCycle('');
     } else {
-      setError({ message: "already exists", show: true });
+      setError({ message: 'already exists', show: true });
       setTimeout(() => {
-        setError({ message: "", show: false });
+        setError({ message: '', show: false });
       }, 3000);
     }
   };
@@ -44,10 +44,10 @@ export default function AddBoardForm(props) {
   };
 
   const handleKeyPressLifeCycle = event => {
-    if(event.keyCode === 13) {
+    if (event.keyCode === 13) {
       addLifeCycle();
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -77,16 +77,16 @@ export default function AddBoardForm(props) {
               margin="normal"
               value={lifeCycle}
               onChange={evt => {
-                setError({ message: "", show: false });
+                setError({ message: '', show: false });
                 setLifeCycle(evt.target.value);
               }}
               inputProps={{ maxLength: '50' }}
               fullWidth
               variant="outlined"
-              onKeyDown = {handleKeyPressLifeCycle}
+              onKeyDown={handleKeyPressLifeCycle}
             />
           </Grid>
-          <Grid item xs={2} style={{margin:'auto'}}>
+          <Grid item xs={2} style={{ margin: 'auto' }}>
             <Button onClick={addLifeCycle}>
               <Icon>add</Icon>
             </Button>
@@ -95,9 +95,9 @@ export default function AddBoardForm(props) {
         <Grid container>
           <Grid item xs={12}>
             {error.show ? (
-              <label className="eror-msg">{error.message}</label>
+              <label className="error-msg">{error.message}</label>
             ) : (
-              ""
+              ''
             )}
           </Grid>
         </Grid>
@@ -114,15 +114,16 @@ export default function AddBoardForm(props) {
                   color="primary"
                   variant="outlined"
                   key={index}
-                  style={{ margin: "5px" }}
+                  style={{ margin: '5px' }}
                 />
               );
             })}
           </Grid>
         </Grid>
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: '10px' }}>
           <div className="float-right">
             <Button
+              color="secondary"
               onClick={onFormSave}
               loading={props.isSaving}
               disable={!name || lifeCycles.length === 0}
@@ -131,7 +132,9 @@ export default function AddBoardForm(props) {
             </Button>
           </div>
           <div className="float-right">
-            <Button onClick={props.onClose}>Close</Button>
+            <Button color="secondary" onClick={props.onClose}>
+              Close
+            </Button>
           </div>
         </div>
       </form>
