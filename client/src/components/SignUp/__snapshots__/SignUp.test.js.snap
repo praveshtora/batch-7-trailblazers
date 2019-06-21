@@ -1,112 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Signup /> should call API 1`] = `
-<WithStyles(ForwardRef(Container))
-  component="main"
-  maxWidth="xs"
+<ContextProvider
+  value={
+    Object {
+      "closeSnackBar": [Function],
+      "openSnackBar": [Function],
+    }
+  }
 >
-  <CssBaseline />
-  <div
-    className="makeStyles-paper-1"
-  >
-    <WithStyles(ForwardRef(Avatar))
-      className="makeStyles-avatar-2"
-    >
-      <LockOutlinedIcon />
-    </WithStyles(ForwardRef(Avatar))>
-    <WithStyles(ForwardRef(Typography))
-      component="h1"
-      variant="h5"
-    >
-      Sign up
-    </WithStyles(ForwardRef(Typography))>
-    <form
-      className="makeStyles-form-3"
-      noValidate={true}
-      onSubmit={[Function]}
-    >
-      <WithStyles(ForwardRef(Grid))
-        container={true}
-        spacing={2}
-      >
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          sm={12}
-          xs={12}
-        >
-          <WithStyles(ForwardRef(TextField))
-            autoComplete="fname"
-            autoFocus={true}
-            fullWidth={true}
-            id="firstName"
-            label="Name"
-            name="name"
-            onChange={[Function]}
-            required={true}
-            variant="outlined"
-          />
-        </WithStyles(ForwardRef(Grid))>
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={12}
-        >
-          <WithStyles(ForwardRef(TextField))
-            autoComplete="email"
-            fullWidth={true}
-            id="email"
-            label="Email Address"
-            name="email"
-            onChange={[Function]}
-            required={true}
-            variant="outlined"
-          />
-        </WithStyles(ForwardRef(Grid))>
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={12}
-        >
-          <WithStyles(ForwardRef(TextField))
-            autoComplete="current-password"
-            fullWidth={true}
-            id="password"
-            label="Password"
-            name="password"
-            onChange={[Function]}
-            required={true}
-            type="password"
-            variant="outlined"
-          />
-        </WithStyles(ForwardRef(Grid))>
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={12}
-        />
-      </WithStyles(ForwardRef(Grid))>
-      <WithStyles(ForwardRef(Button))
-        className="makeStyles-submit-4"
-        color="primary"
-        fullWidth={true}
-        type="submit"
-        variant="contained"
-      >
-        Sign Up
-      </WithStyles(ForwardRef(Button))>
-      <WithStyles(ForwardRef(Grid))
-        container={true}
-        justify="flex-end"
-      >
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-        >
-          <WithStyles(ForwardRef(Link))
-            href="/login"
-            variant="body2"
-          >
-            Already have an account? Sign in
-          </WithStyles(ForwardRef(Link))>
-        </WithStyles(ForwardRef(Grid))>
-      </WithStyles(ForwardRef(Grid))>
-    </form>
-  </div>
-</WithStyles(ForwardRef(Container))>
+  <SignUp />
+  <SnackBar
+    handleClose={[Function]}
+    message=""
+    open={false}
+    type="info"
+  />
+</ContextProvider>
 `;

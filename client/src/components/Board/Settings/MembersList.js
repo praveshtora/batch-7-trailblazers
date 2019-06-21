@@ -77,7 +77,7 @@
           data,
           withCredentials: true
         });
-        const { isSuccess, message } = response.data;
+        const { message } = response.data;
         openSnackBar('success', message);
         fetchBoardMembers();
       }
@@ -106,7 +106,7 @@
       setShowLoader(true);
       closeConfirmationModal();
       try {
-        const result = await axios({
+        await axios({
           url: `${SERVER_URL}/board/member/${boardId}`,
           method: 'delete',
           data: {member: memberToBeDelete._id},
@@ -138,13 +138,12 @@
       switch(role){
         case SUPER_ADMIN:
           return "Super Admin";
-          break;
         case ADMIN:
           return "Admin";
-          break;
         case USER:
-            return "User";
-            break;
+          return "User";
+        default:
+          return "User";
       }
     }
     return <Fragment>

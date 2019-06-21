@@ -12,12 +12,13 @@ import { ThemeProvider } from '@material-ui/styles';
 import theme from './theme';
 import HeaderWithUserAvatar from './components/HeaderWithUserAvatar';
 
-function App() {
+function App(props) {
+  const isLoginView = props.location.pathname === '/login';
   return (
     <ThemeProvider theme={theme}>
       <SnackBarProvider>
         <div className="App">
-          <HeaderWithUserAvatar />
+          {isLoginView || <HeaderWithUserAvatar />}
           <Switch>
             <PrivateRoute exact path="/login" component={Login} />
             <PrivateRoute exact path="/signup" component={Signup} />

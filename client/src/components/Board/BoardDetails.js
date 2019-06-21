@@ -40,8 +40,25 @@ const BoardDetails = props => {
   const handleCloseInviteDialog = () => setOpenInviteUserDialog(false);
 
   useEffect(() => {
-    fetchRole();
-  }, [fetchRole, props]);
+    (async () => {
+      try {
+        const result = await axios(
+          `${SERVER_URL}/board/member/role/${boardId}`,
+          {
+            withCredentials: true
+          }
+        );
+        if (result.data.data.length > 0) {
+          setUserRole(result.data.data[0].role);
+        }
+      } catch (error) {
+        const { isSuccess, message } = error.response.data;
+        if (!isSuccess) {
+          openSnackBar('error', message);
+        }
+      }
+    })();
+  }, [boardId, openSnackBar]);
 
   const handleSaveInvite = async () => {
     try {
@@ -64,22 +81,6 @@ const BoardDetails = props => {
       }
     }
   };
-
-  async function fetchRole() {
-    try {
-      const result = await axios(`${SERVER_URL}/board/member/role/${boardId}`, {
-        withCredentials: true
-      });
-      if (result.data.data.length > 0) {
-        setUserRole(result.data.data[0].role);
-      }
-    } catch (error) {
-      const { isSuccess, message } = error.response.data;
-      if (!isSuccess) {
-        openSnackBar('error', message);
-      }
-    }
-  }
 
   const kanbanReference = useRef();
 

@@ -57,19 +57,22 @@ const Issue = ({ issue = {}, index, openModalIssueDetails }) => {
   const [dueDateText, setDueDateText] = useState('');
 
   const findPercentage = () => {
-    const created_at = '2019-06-19T05:00:27.871Z';
-    const startDate = moment(created_at);
-    const endDate = moment(dueDate);
-    const today = moment();
-    setDueDateText('due ' + endDate.fromNow());
+    if (dueDate) {
+      const created_at = '2019-06-19T05:00:27.871Z';
+      const startDate = moment(created_at);
 
-    const totalDuration = moment.duration(endDate.diff(startDate));
-    const completedDuration = moment.duration(today.diff(startDate));
-    const diffInPercentage =
-      (completedDuration.asMilliseconds() / totalDuration.asMilliseconds()) *
-      100;
+      const endDate = moment(dueDate);
+      const today = moment();
+      setDueDateText('due ' + endDate.fromNow());
 
-    setPercentage(diffInPercentage);
+      const totalDuration = moment.duration(endDate.diff(startDate));
+      const completedDuration = moment.duration(today.diff(startDate));
+      const diffInPercentage =
+        (completedDuration.asMilliseconds() / totalDuration.asMilliseconds()) *
+        100;
+
+      setPercentage(diffInPercentage);
+    }
   };
 
   useEffect(findPercentage, [issue]);
@@ -86,13 +89,17 @@ const Issue = ({ issue = {}, index, openModalIssueDetails }) => {
             </Box>
           </div>
         </CardContent>
-        <h5 className={dueDateStyle}>{dueDateText}</h5>
-        <LinearProgress
-          variant="determinate"
-          color="secondary"
-          className={dueDateProgress}
-          value={percentage}
-        />
+        {dueDate && (
+          <>
+            <h5 className={dueDateStyle}>{dueDateText}</h5>
+            <LinearProgress
+              variant="determinate"
+              color="secondary"
+              className={dueDateProgress}
+              value={percentage}
+            />
+          </>
+        )}
       </Card>
     </DraggableContainer>
   );

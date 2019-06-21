@@ -53,7 +53,7 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
 
   const [id, setId] = useState(0);
   const title = useFormInput('Loading');
-  const dueDate = useFormInput(undefined, true);
+  const dueDate = useFormInput(null, true);
   const assignee = useFormInput('');
   const newComment = useFormInput('');
   const description = useFormInput('');
@@ -74,9 +74,10 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
         withCredentials: true
       }),
       data => {
+        console.log('data', data)
         setId(data.id);
         setNewValue(title, data.title);
-        dueDate.onChange(data.dueDate);
+        dueDate.onChange(data.dueDate || null);
         setNewValue(assignee, data.assignee);
         setNewValue(description, data.description);
         setComments(data.comments.reverse());
@@ -151,10 +152,10 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
         <div>
           <Box display="flex"  justifyContent="space-between">
             <DatePicker
-             
-              className="date-picker"
-              disablePast
               label="Due Date"
+              className="date-picker"
+              clearable
+              disablePast
               {...dueDate}
             />
             <OutlinedSelectInput

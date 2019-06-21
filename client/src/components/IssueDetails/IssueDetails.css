@@ -44,6 +44,10 @@
   margin-top: 8px;
 }
 
+.IssueDetails .date-picker label {
+  transform: translate(14px, 15px) scale(1);
+}
+
 .IssueDetails .date-picker .MuiIconButton-root {
   padding: 4px;
   font-size: 1em;

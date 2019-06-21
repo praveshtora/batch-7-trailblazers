@@ -15,7 +15,7 @@ import IssueDetails from '../../components/IssueDetails/IssueDetails';
 import './KanbanView.css';
 
 const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
-  const [lifeCycles, setLifeCycles] = useState([]);
+  const [lifeCycles, setLifeCycles] = useState({});
   const { openSnackBar } = useSnackBar();
   const [boardMembers, setBoardMembers] = useState([]);
 
@@ -48,7 +48,7 @@ const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
     fetchBoardMembers();
     setOpenIssueDetails(true);
   };
-  const onIssueModalClose = message => setOpenIssueDetails(false);
+  const onIssueModalClose = () => setOpenIssueDetails(false);
 
   const onUpdateIssue = message => {
     showSuccess(message);
@@ -69,7 +69,7 @@ const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
 
   useEffect(getBoardsData, []);
 
-  const changeLifeCycle = async (id, finishLifeCycleName) => {
+  const changeLifeCycle = async (id, finishLifeCycleName, onError) => {
     requestToServer(
       axios({
         method: 'post',
@@ -80,8 +80,8 @@ const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
         },
         withCredential: true
       }),
-      getBoardsData,
-      showError
+      data => {},
+      onError
     );
   };
 
@@ -95,26 +95,36 @@ const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
       return;
     }
 
+    const backupLifeCycle = { ...lifeCycles };
     const startLifeCycleName = source.droppableId;
     const finishLifeCycleName = destination.droppableId;
 
     if (startLifeCycleName !== finishLifeCycleName) {
-      const startLifeCycle = lifeCycles[startLifeCycleName].issues;
-      const startIssues = Array.from(startLifeCycle);
+      const startLifeCycle = lifeCycles[startLifeCycleName];
+      const startIssues = Array.from(startLifeCycle.issues);
       const issue = startIssues[source.index];
       startIssues.splice(source.index, 1);
 
-      const finishLifeCycle = lifeCycles[finishLifeCycleName].issues;
-      const finishIssues = Array.from(finishLifeCycle);
+      const finishLifeCycle = lifeCycles[finishLifeCycleName];
+      const finishIssues = Array.from(finishLifeCycle.issues);
       finishIssues.push(issue);
 
       setLifeCycles({
         ...lifeCycles,
-        [startLifeCycleName]: startIssues,
-        [finishLifeCycleName]: finishIssues
+        [startLifeCycleName]: {
+          ...startLifeCycle,
+          issues: startIssues
+        },
+        [finishLifeCycleName]: {
+          ...finishLifeCycle,
+          issues: finishIssues
+        }
       });
 
-      changeLifeCycle(issue.id, finishLifeCycleName);
+      changeLifeCycle(issue.id, finishLifeCycleName, errMessage => {
+        showError(errMessage);
+        setLifeCycles(backupLifeCycle);
+      });
     }
   };
 

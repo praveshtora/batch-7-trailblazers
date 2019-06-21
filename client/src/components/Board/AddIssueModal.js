@@ -152,7 +152,7 @@ const AddIssueModal = props => {
               disablePast
               label="Due Date"
               margin="normal"
-              clearable={true}
+              clearable
               {...dueDate}
             />
           </Grid>

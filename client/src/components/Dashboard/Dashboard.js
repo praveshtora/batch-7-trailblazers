@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Board from './Board';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, Box } from '@material-ui/core';
 import { SERVER_URL } from '../../config';
 import AddBoardModel from '../CommonComponents/Modal';
 import AddBoardForm from './AddBoardForm';
@@ -33,8 +33,7 @@ const BoardsContainer = ({
           >
             <Typography
               variant="h6"
-              component="h2"
-              className="text-align-center"
+              className="text-align-center text-color-white"
             >
               Create Board
             </Typography>
@@ -42,20 +41,20 @@ const BoardsContainer = ({
         )}
         {boardList.map((board, index) => (
           <Board
-            key={index}
+            key={board.id}
             showAction={true}
             backgroundColor={PRIMARY_MAIN}
             afterClick={() => afterClick(board.id)}
           >
-            <label className="labelId">#{board.id}</label>
-            <Typography
-              variant="h6"
-              gutterBottom
-              className="text-color-white"
-              style={{ display: 'inline-block' }}
-            >
-              {board.name}
-            </Typography>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <label className="labelId">#{board.id}</label>
+              <Typography
+                variant="h6"
+                className="text-color-white"
+              >
+                {board.name}
+              </Typography>
+            </Box>
           </Board>
         ))}
       </Grid>
