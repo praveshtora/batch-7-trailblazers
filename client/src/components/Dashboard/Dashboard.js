@@ -139,7 +139,7 @@ export default function Dashboard(props) {
   return (
     <Fragment>
       <BoardsContainer
-        title="Personal"
+        title="Owns"
         boardList={ownBoards}
         afterClick={goToBoard}
         showCreateNew={true}
@@ -147,7 +147,7 @@ export default function Dashboard(props) {
       />
       {otherBoards.length > 0 && (
         <BoardsContainer
-          title="Others"
+          title="Collaborating"
           boardList={otherBoards}
           afterClick={goToBoard}
         />

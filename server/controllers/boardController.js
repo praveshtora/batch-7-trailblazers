@@ -94,7 +94,7 @@ const addIssue = async function (req, res) {
     const validationSchema = Joi.object().keys({
       id: Joi.number().required(),
       title: Joi.string().required(),
-      description: Joi.string(),
+      description: Joi.string().empty(''),
       assignee: Joi.string().empty(''),
       dueDate: Joi.date().empty(''),
     });
