@@ -11,7 +11,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
 import {SERVER_URL} from "../../config";
-import {Redirect} from 'react-router'
+import {Redirect} from 'react-router';
+import { useSnackBar } from '../../customHooks';
+
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -48,6 +50,7 @@ export default function SignUp() {
   const [user,setUser] = useState ({name :"", email:"",password: ""});
   const [errorMessage, setErrorMessage] = useState('');
   const [signUpSuccess, setSignUpSucess] = useState(false);
+  const { openSnackBar } = useSnackBar();
 
   const handleEmailChange = evt => {
     setUser({...user,email :evt.target.value});
@@ -76,7 +79,9 @@ export default function SignUp() {
     }
 
   } catch (err) {
-    setErrorMessage(err.response.data.message);
+    if(err.response) {
+      openSnackBar('error',err.response.data.message);
+    }
   }
 
   };

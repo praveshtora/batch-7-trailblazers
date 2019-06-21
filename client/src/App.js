@@ -16,15 +16,22 @@ import PrivateRoute, { Auth } from './components/PrivateRoute/PrivateRoute';
 import { Icon, Popover, List, ListItem, ListItemText } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from './theme';
+import Cookies from 'js-cookie';
 
 function App(props) {
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
+  const [userName, setUserName] = useState('');
   const openProfile = Boolean(profileAnchorEl);
   const isLogin = props.location.pathname === '/login';
   const handleProfileClick = function(event) {
     setProfileAnchorEl(event.currentTarget);
+    if(Cookies.get('issue_tracker_user')) {
+      console.log(Cookies.get('issue_tracker_user'));
+      const user = JSON.parse(Cookies.get('issue_tracker_user'));
+      setUserName(user.name);
+    } 
   }
-
+  
   const logOut = () => {
     Auth.logout();
     setProfileAnchorEl(null);
@@ -53,6 +60,9 @@ function App(props) {
             }}
           >
             <List component="nav">
+              <ListItem>
+                <ListItemText primary={userName}/>
+              </ListItem>
               <ListItem onClick={logOut} button>
                 <ListItemText primary="Logout"/>
               </ListItem>

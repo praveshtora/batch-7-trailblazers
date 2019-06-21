@@ -1,6 +1,6 @@
 import Board from '../models/boardModel';
 import Issue from '../models/issueModel';
-import { buildResponse, joiValidate } from '../utils/helpers';
+import { buildResponse, joiValidate, validateUserInBoard } from '../utils/helpers';
 import {
   ROLES_ENUM,
   SERVER_ERROR_MESSAGE,
@@ -9,13 +9,19 @@ import {
   DELETE_MEMBER,
 } from '../utils/constants';
 import mongoose from 'mongoose';
+import { SERVER_NOT_AUTHENTICATE } from './../utils/constants';
 
 const getMembers = async (req, res) => {
   try {
+    const userId = req.user.id;
     const [isValid, response] = joiValidate(req.params, GET_MEMBERS);
     if (!isValid) return res.status(400).send(response);
 
     const boardId = req.params.id;
+    const isUserPresent = await validateUserInBoard(userId, boardId);
+    if(!isUserPresent) {
+      return res.status(401).send(buildResponse(false, SERVER_NOT_AUTHENTICATE));
+    }
     const board = await Board.findOne({ id: boardId }, { members: 1 }).populate(
       'members.user',
       'name email',
@@ -96,6 +102,10 @@ const getRoleOfMember = async (req, res) => {
   try {
     const boardId = req.params.id;
     const userId = req.user.id;
+    const isUserPresent = await validateUserInBoard(userId, boardId);
+    if(!isUserPresent) {
+      return res.status(401).send(buildResponse(false, SERVER_NOT_AUTHENTICATE));
+    }
     const board = await Board.findOne({ id: boardId }, { members: 1 });
 
     const member = board.members.filter(mem => {

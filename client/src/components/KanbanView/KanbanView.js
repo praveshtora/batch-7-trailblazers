@@ -14,7 +14,7 @@ import Modal from '@material-ui/core/Modal';
 import IssueDetails from '../../components/IssueDetails/IssueDetails';
 import './KanbanView.css';
 
-const KanbanView = forwardRef(({ boardId }, ref) => {
+const KanbanView = forwardRef(({ boardId, setBoardName }, ref) => {
   const [lifeCycles, setLifeCycles] = useState([]);
   const { openSnackBar } = useSnackBar();
   const [boardMembers, setBoardMembers] = useState([]);
@@ -58,9 +58,10 @@ const KanbanView = forwardRef(({ boardId }, ref) => {
 
   const getBoardsData = () => {
     requestToServer(
-      axios.get(`${SERVER_URL}/board/${boardId}`),
+      axios.get(`${SERVER_URL}/board/${boardId}`, { withCredentials: true }),
       data => {
         setLifeCycles(data.lifeCycles);
+        setBoardName(data.name);
       },
       showError
     );

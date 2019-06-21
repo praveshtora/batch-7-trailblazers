@@ -4,10 +4,10 @@ import handelbars from 'handlebars';
 import Board from '../models/boardModel';
 import { buildResponse, joiValidate } from '../utils/helpers';
 import Issue from '../models/issueModel';
-import { INVITE_EMAIL_SCHEMA, SERVER_ERROR_MESSAGE, ROLES_ENUM } from '../utils/constants';
+import { INVITE_EMAIL_SCHEMA, SERVER_ERROR_MESSAGE, SERVER_NOT_AUTHENTICATE,  ROLES_ENUM } from '../utils/constants';
 import User from '../models/userModel';
 import Dashboard from '../models/dashboardModel';
-
+import { validateUserInBoard } from './../utils/helpers';
 import sendEmail from '../utils/emailService';
 
 const readHTMLFile = path => fs.readFileSync(path);
@@ -40,6 +40,7 @@ const invitedUserAlreadyMember = (board, invitedUser) => {
 };
 
 const getBoardDetails = async (req, res) => {
+  const userId = req.user.id;
   const boardId = req.params.id;
   const isBordIdValid = validateBoardId(boardId);
   if (!isBordIdValid) {
@@ -47,7 +48,13 @@ const getBoardDetails = async (req, res) => {
   }
   try {
     const id = parseInt(req.params.id, 10);
-    const [board] = await Board.find({ id }, 'lifeCycles issues').populate(
+
+    const isUserPresent = await validateUserInBoard(userId, boardId);
+    if(!isUserPresent) {
+      return res.status(401).send(buildResponse(false, SERVER_NOT_AUTHENTICATE));
+    }
+
+    const [board] = await Board.find({ id }, 'lifeCycles issues name').populate(
       'issues',
       'title  lifeCycle comments id',
     );
@@ -68,7 +75,7 @@ const getBoardDetails = async (req, res) => {
       const { lifeCycle } = issue;
       responseObject[lifeCycle].issues.push(issueTobeSent);
     });
-    return res.status(200).send(buildResponse(true, '', { lifeCycles: responseObject }));
+    return res.status(200).send(buildResponse(true, '', { lifeCycles: responseObject, name: board.name }));
   } catch (err) {
     console.error(err);
     return res.status(500).send(buildResponse(false, SERVER_ERROR_MESSAGE));
@@ -93,6 +100,8 @@ const addIssue = async function (req, res) {
       return res.status(400).send(response);
     }
     const boardId = req.params.id;
+
+    validateUserInBoard
 
     const board = await Board.findOne({ id: boardId }).select('lifeCycles');
     if (!board) {

@@ -20,6 +20,7 @@
   import Button from './../../Button';
   import constants from './../../../constants';
   import AppMenu from './../../AppMenu/AppMenu'; 
+
   const MemberList = function(props) {
     const [members, setMembers] = useState([]);
     const [showLoader, setShowLoader] = useState(true);
@@ -54,7 +55,7 @@
     }
     async function fetchBoardMembers() {
       try {
-        const result = await axios(`${SERVER_URL}/board/members/${boardId}`);
+        const result = await axios(`${SERVER_URL}/board/members/${boardId}`, { withCredentials: true });
         setMembers(result.data.data);
         setShowLoader(false);
       }
@@ -216,7 +217,7 @@
       <Modal
         open={openModal}
         handleClose={onClose}
-        width="500px"
+        width="450px"
         title="Confirm Delete"
         >
           <p><Icon>warning</Icon> Are you sure you want to delete member '{user.name}'</p>

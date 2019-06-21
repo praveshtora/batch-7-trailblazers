@@ -98,7 +98,7 @@ const AddIssueModal = props => {
       open={props.open}
       title="Add Issue"
       handleClose={props.handleClose}
-      width="500px"
+      width="450px"
     >
       <form onSubmit={handleOnSubmit}>
         <Grid container>
@@ -143,7 +143,7 @@ const AddIssueModal = props => {
             >
               {
                 boardMembers.map( (member, index) => {
-                  return <MenuItem key={index} value={member.user._id}>
+                  return <MenuItem key={index} value={member.user.name}>
                           {member.user.name}
                         </MenuItem>
                 })

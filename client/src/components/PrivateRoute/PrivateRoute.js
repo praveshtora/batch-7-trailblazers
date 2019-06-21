@@ -52,6 +52,12 @@ function PrivateRoute({ component: Component, ...rest }) {
 axios.interceptors.response.use(res => res, function (error) {
   if(!error.response){
     error.response = { data: { isSuccess: false, message: 'Network Error!'} };
+  } 
+  else if(error.response.status === 401) {
+    setTimeout(() => {
+      window.location.href = '/dashboard'; 
+    }, 1000);
+    
   } else if(error.response.status === 403) {
     Auth.logout();
     alert('Session Expired, Redirecting to login...');

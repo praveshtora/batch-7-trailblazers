@@ -173,7 +173,7 @@ export default function Dashboard(props) {
       <AddBoardModel
         open={openAddModel}
         handleClose={handleModalClose}
-        width="500px"
+        width="450px"
         title="Add Board"
       >
         <AddBoardForm

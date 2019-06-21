@@ -74,6 +74,7 @@ const updateIssueDetails = {
 };
 
 export const SERVER_ERROR_MESSAGE = 'Some error occurred on server';
+export const SERVER_NOT_AUTHENTICATE = "You don't have permission to view data";
 export const LOGIN_FIELDS_SCHEMA = JoiObject(loginFields);
 export const SIGNUP_FIELDS_SCHEMA = JoiObject(signupFields);
 export const ISSUE_CHANGE_LIFECYCLE_SCHEMA = JoiObject(changeLifeCycle);

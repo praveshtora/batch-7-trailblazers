@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
+import logo from './../../assets/grootlogo.png';
 const useStyles = makeStyles(theme => ({
   rightAligned: {
     position: 'absolute',
@@ -27,9 +27,8 @@ function Header({ name = '', children }) {
         className={classes.marginBottom}
       >
         <Toolbar>
-          <Typography variant="h6" color="inherit">
-            {name}
-          </Typography>
+          <img width="150px" src={logo}/>
+         
           <div className={classes.rightAligned}>
             {React.Children.map(children, child => {
               return React.cloneElement(child, { className: classes.spacing });

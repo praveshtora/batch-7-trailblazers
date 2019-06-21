@@ -8,6 +8,7 @@ import axios from 'axios';
 import {SERVER_URL} from '../../config';
 import { useSnackBar } from '../../customHooks';
 import Modal from './../CommonComponents/Modal';
+import constants from './../../constants';
 
 const BoardDetails = props => {
   const boardId = props.match.params.id;
@@ -19,6 +20,9 @@ const BoardDetails = props => {
   const { openSnackBar } = useSnackBar();
   const showError = useCallback(message => openSnackBar('error', message), [openSnackBar]);
   const showSuccess = useCallback(message => openSnackBar('success', message), [openSnackBar]);
+  const [ userRole, setUserRole ] = useState('USER');
+  const [ boardName, setBoardName ] = useState('Loading...');
+  const { USER } = constants.ROLES;
 
 
   const handleSettingClick = function(event) {
@@ -68,15 +72,33 @@ const BoardDetails = props => {
     setInviteeEmail(e.target.value)
   }
 
+  async function fetchRole() {
+    try {
+      const result = await axios(`${SERVER_URL}/board/member/role/${boardId}`,
+      {
+        withCredentials: true
+      });
+      if(result.data.data.length > 0) {
+        setUserRole(result.data.data[0].role);
+      }
+    }
+    catch(error){
+      const { isSuccess, message } = error.response.data;
+      if (!isSuccess) {
+        openSnackBar('error', message);
+      }
+    }
+  }
+
   const kanbanReference = useRef();
 
   return (
     <Fragment>
-    <AppMenu title="Board Details">
+    <AppMenu title={boardName}>
     <div style={{float: 'right'}}>
       <Icon style={{fontSize: 30, float: 'right', cursor: 'pointer'}} onClick={handleSettingClick}>settings</Icon>
       <div className="app-menu-button" ><Button onClick={()=>setOpenIssueModal(true)} ><Icon>add</Icon>New Issue</Button></div>
-      <div className="app-menu-button" ><Button onClick={handleClickOpenInviteDailog}><Icon>add</Icon>Invite</Button></div>
+      { userRole === USER || <div className="app-menu-button" ><Button onClick={handleClickOpenInviteDailog}><Icon>add</Icon>Invite</Button></div>}
     </div>
 
 
@@ -103,7 +125,7 @@ const BoardDetails = props => {
       </Popover>
     </AppMenu>
 
-    <Modal title="Invite" open={openInviteUserDailog} handleClose={handleCloseInviteDailog} width="500px">
+    <Modal title="Invite" open={openInviteUserDailog} handleClose={handleCloseInviteDailog} width="450px">
           Please enter the email address below to invite someone for collaboration
         <TextField
           autoFocus
@@ -128,7 +150,7 @@ const BoardDetails = props => {
         </div>
     </Modal>
     <Box m={1}>
-      <KanbanView ref={kanbanReference} boardId={props.match.params.id} />
+      <KanbanView ref={kanbanReference} boardId={props.match.params.id}  setBoardName={setBoardName}/>
     </Box>
 
     {openAddIssueModal && <AddIssueModal boardId={boardId} open={openAddIssueModal} handleClose={() => setOpenIssueModal(false)}
