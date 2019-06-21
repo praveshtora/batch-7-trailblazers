@@ -119,7 +119,7 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
     };
     if (dueDate.value) {
       fields.dueDate = dueDate.value;
-    }
+    } else fields.dueDate = ''
 
     requestToServer(
       axios.post(

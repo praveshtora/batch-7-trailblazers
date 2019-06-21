@@ -67,7 +67,7 @@ const comment = {
 const updateIssueDetails = {
   id: Joi.number().required(),
   title: Joi.string(),
-  dueDate: Joi.date(),
+  dueDate: Joi.date().allow(''),
   assignee: Joi.string().empty(''),
   description: Joi.string(),
   newComments: Joi.array().items(JoiObject(comment)),
