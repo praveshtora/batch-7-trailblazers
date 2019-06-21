@@ -20,7 +20,7 @@ const BoardsContainer = ({
   <>
     <Grid container>
       <Grid item xs={12}>
-        <h3>{title}</h3>
+        <h2 style={{ marginLeft: '24px' }}>{title}</h2>
       </Grid>
     </Grid>
     <Grid container>

@@ -228,12 +228,13 @@
               <Button
                 type="submit"
                 onClick = {onConfirm}
+                color="secondary"
               >
                 Confirm
               </Button>
             </div>
             <div className="float-right">
-              <Button onClick={onClose}>No</Button>
+              <Button onClick={onClose} color="secondary">No</Button>
             </div>
           </div>
     </Modal>);

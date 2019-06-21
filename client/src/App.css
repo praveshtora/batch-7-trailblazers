@@ -29,7 +29,7 @@
 
 .board {
   min-width: 275px;
-  margin: 25px;
+  margin: 8px 24px;
   min-height: 135px;
   float: left;
   cursor: pointer;
