@@ -97,7 +97,7 @@ const AddIssueModal = props => {
       open={props.open}
       title="Add Issue"
       handleClose={props.handleClose}
-      width="450px"
+      width="360px"
     >
       <form onSubmit={handleOnSubmit}>
         <Grid container>

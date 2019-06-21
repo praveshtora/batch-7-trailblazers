@@ -19,7 +19,8 @@
   import Modal from './../../CommonComponents/Modal';
   import Button from './../../Button';
   import constants from './../../../constants';
-  import AppMenu from './../../AppMenu/AppMenu'; 
+  import AppMenu from './../../AppMenu/AppMenu';
+  import { requestToServer } from '../../../util/helper';
 
   const MemberList = function(props) {
     const [members, setMembers] = useState([]);
@@ -31,42 +32,26 @@
     const boardId = props.match.params.id;
     const [ userRole, setUserRole ] = useState('USER');
 
-    useEffect(() => {
-      fetchBoardMembers();
-      fetchRole();
-    }, [props]);
+    useEffect(fetchBoardMembers, []);
+    useEffect(fetchRole, []);
 
-    async function fetchRole() {
-      try {
-        const result = await axios(`${SERVER_URL}/board/member/role/${boardId}`,
-        {
-          withCredentials: true
-        });
-        if(result.data.data.length > 0) {
-          setUserRole(result.data.data[0].role);
-        }
-      }
-      catch(error){
-        const { isSuccess, message } = error.response.data;
-        if (!isSuccess) {
-          openSnackBar('error', message);
-        }
-      }
+    function fetchRole() {
+      requestToServer(
+        axios(`${SERVER_URL}/board/member/role/${boardId}`, { withCredentials: true }),
+        data => setUserRole(data[0].role),
+        errMessage => openSnackBar('error', errMessage)
+      )
     }
-    async function fetchBoardMembers() {
-      try {
-        const result = await axios(`${SERVER_URL}/board/members/${boardId}`, { withCredentials: true });
-        setMembers(result.data.data);
-        setShowLoader(false);
-      }
-      catch(error) {
-        if(error.response) {
-          const { isSuccess, message } = error.response.data;
-          if (!isSuccess) {
-            openSnackBar('error', message);
-          }
-        }
-      }
+
+    function fetchBoardMembers() {
+      requestToServer(
+        axios(`${SERVER_URL}/board/members/${boardId}`, { withCredentials: true }),
+        data => {
+          setMembers(data);
+          setShowLoader(false);
+        },
+        errMessage => openSnackBar('error', errMessage)
+      )
     }
 
     const updateBoardMember = async data => {

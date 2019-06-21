@@ -33,8 +33,8 @@ export default function CustomModal(props) {
           style={{ width: props.width }}
           className={classes.paper + ' modalStyle'}
         >
-          <Box bgcolor="primary.main" color="primary.contrastText" p={2} m={0}>
-            <Typography variant="h6" style={{ display: 'inline-block' }}>
+          <Box bgcolor="primary.main" color="primary.contrastText" p={1} m={0}>
+            <Typography variant="h6" style={{ display: 'inline-block', marginLeft: 16 }}>
               {props.title}
             </Typography>
             <div className="modalCloseCross">
@@ -48,7 +48,7 @@ export default function CustomModal(props) {
               </IconButton>
             </div>
           </Box>
-          <div style={{ padding: '32px' }}>{props.children}</div>
+          <div style={{ padding: 24 }}>{props.children}</div>
         </div>
       </Modal>
     </Fragment>

@@ -157,9 +157,11 @@ const BoardDetails = props => {
         title="Invite"
         open={openInviteUserDialog}
         handleClose={handleCloseInviteDialog}
-        width="450px"
+        width="360px"
       >
-        Please enter the email address below to invite someone for collaboration
+        <h4 className="InviteModalTitle">
+          Please enter the email address below to invite someone for collaboration
+        </h4>
         <TextField
           autoFocus
           margin="dense"

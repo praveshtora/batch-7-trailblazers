@@ -28,7 +28,11 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 4
   },
   commentsContainer: {
-    backgroundColor: '#dce1ff'
+    backgroundColor: '#31968817'
+  },
+  createByStyle: {
+    paddingLeft: 16,
+    color: '#777'
   }
 }));
 
@@ -74,7 +78,6 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
         withCredentials: true
       }),
       data => {
-        console.log('data', data)
         setId(data.id);
         setNewValue(title, data.title);
         dueDate.onChange(data.dueDate || null);
@@ -145,12 +148,10 @@ const IssueDetails = ({ issueId, boardMembers, onClose, onUpdateIssue }) => {
         <CloseButton onClose={onClose} />
       </header>
       {dataLoading && <LinearProgress />}
+      <Typography display='block' className={classes.createByStyle} variant="overline">Created By: {createdBy}</Typography>
       <div className="container">
         <div>
-          <Typography display='block' gutterBottom variant="overline">Created By: {createdBy}</Typography>
-        </div>
-        <div>
-          <Box display="flex"  justifyContent="space-between">
+          <Box display="flex" justifyContent="space-between">
             <DatePicker
               label="Due Date"
               className="date-picker"
